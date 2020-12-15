@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500;600;700&display=swap');
-*{
+
+* {
     /* outline: 1px solid red; */
 }
 
@@ -23,6 +24,7 @@ header{
     width: 1080px;
     margin: 0 auto;
     display: flex;
+    position: relative;
     /* align-items: center; */
 }
 .logo{
@@ -61,6 +63,48 @@ header{
     display: flex;
     flex-direction: column;
 }
+
+.searchbar{
+    flex: 1 0 5%;
+    text-align: right;
+}
+.close_search{
+    display: none;
+}
+.search_checkbox{
+    display: none;
+}
+.search_text{
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 55px;
+    z-index: 2;
+    padding: 10px;
+    width: 77%;
+    font-size: 20px;
+}
+.search_checkbox:checked ~ .search_text{
+    display: block;
+}
+.searchbar i{
+    padding: 10px;
+    font-size: 22px;
+}
+.close_searchbar{
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 55px;
+    z-index: 3;
+    outline: none;
+    border: none;
+    background-color: transparent;
+}
+.search_checkbox:checked ~ .close_searchbar{
+    display: block;
+}
+
 .search{
     flex: 1 0 5%;
     text-align: right;
@@ -68,6 +112,7 @@ header{
 .search i{
     font-size: 30px;
 }
+
 
 
 .title{
