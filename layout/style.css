@@ -1,7 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500;600;700&display=swap');
-*{
-    /* outline: 1px solid red; */
-}
 
 html{
     min-width: 1080px;
@@ -64,9 +61,6 @@ header{
 .searchbar{
     flex: 1 0 5%;
     text-align: right;
-}
-.click_search{
-
 }
 .close_search{
     display: none;
