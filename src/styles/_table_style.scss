@@ -1,0 +1,63 @@
+@mixin table_style {
+  width: 100%;
+
+  &>.title {
+    background-color: #333333;
+    color: #fff;
+    padding: $block_padding;
+    letter-spacing: 1px;
+  }
+
+  .column_years {
+    display: flex;
+    background-color: $rows_name_block_color;
+    align-items: center;
+
+    .names__title {
+      flex: 0 0 22%;
+      text-align: left;
+      margin-left: 10px;
+      padding: $block_padding;
+      box-sizing: border-box;
+    }
+
+    .year {
+      flex: 0 1 10%;
+      padding: $block_padding;
+      text-align: right;
+    }
+  }
+
+  .data_table {
+    display: flex;
+    flex-direction: column;
+
+    .data_row {
+      display: flex;
+      align-items: center;
+      border-top: 1px solid $border_color;
+
+      &:nth-child(2n-1) {
+        background-color: $column_block_grey;
+      }
+
+      .row_name {
+        flex: 0 0 22%;
+        text-align: left;
+        margin-left: 10px;
+        padding: $block_padding;
+        box-sizing: border-box;
+
+        &.ident {
+          padding-left: $ident_px;
+        }
+      }
+
+      .each_data {
+        flex: 0 1 10%;
+        padding: $block_padding;
+        text-align: right;
+      }
+    }
+  }
+}
