@@ -57,6 +57,10 @@
         flex: 0 1 10%;
         padding: $block_padding;
         text-align: right;
+
+        &.negative{
+          color:#c02020;
+        }
       }
     }
   }

@@ -35,12 +35,10 @@
 
 <script>
 export default {
-  props: ["lookUpSheet"],
+  props: ["lookUpSheet",'dataAPI'],
   data() {
     return {
       typeOfSheet: "year_per_share_ratios",
-      dataAPI:
-        "https://5fbd1e2b3f8f90001638cc76.mockapi.io/reportRatioYear2330",
       companyData: [],
       dataReady: false,
     };
