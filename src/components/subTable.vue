@@ -8,7 +8,7 @@
         :key="'year' + data.year"
         class="year"
       >
-        {{ data.year }}</span
+        {{ data.year }}<br>合併</span
       >
     </div>
     <div class="data_table">
@@ -99,7 +99,7 @@ export default {
 <style lang="scss" scoped>
 $column_block_grey: #eeeeee;
 $border_color: #dbdbdb;
-$block_padding: 10px;
+$block_padding: 10px 20px 10px 0;
 $rows_name_block_color: #e4edf1;
 $ident_px: 30px;
 .table {
@@ -114,7 +114,7 @@ $ident_px: 30px;
     background-color: $rows_name_block_color;
     align-items: center;
     .names__title {
-      flex: 0 0 20%;
+      flex: 0 0 22%;
       text-align: left;
       padding: $block_padding;
       box-sizing: border-box;
@@ -122,6 +122,7 @@ $ident_px: 30px;
     .year {
       flex: 0 1 10%;
       padding: $block_padding;
+      text-align: right;
     }
   }
 
@@ -137,7 +138,7 @@ $ident_px: 30px;
       }
 
       .row_name {
-        flex: 0 0 20%;
+        flex: 0 0 22%;
         text-align: left;
         padding: $block_padding;
         box-sizing: border-box;
@@ -150,6 +151,7 @@ $ident_px: 30px;
       .each_data {
         flex: 0 1 10%;
         padding: $block_padding;
+        text-align: right;
       }
     }
   }
