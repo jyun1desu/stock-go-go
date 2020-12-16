@@ -57,6 +57,7 @@ export default {
           (row) => row.table_name === "balance_sheets"
         );
         this.dataReady=true;
+        this.$emit('isReady')
       });
   },
   methods: {

@@ -106,21 +106,24 @@
         </nav>
       </div>
     </header>
-    <main v-if="dataReady">
+    <main v-show="componentIsReady">
       <section class="title">
         <div class="title_content">
           <p>{{ stockIDandName }}</p>
           <p>{{ sheetNameInMandarin }}</p>
         </div>
       </section>
-      <section class="data">
+      <Loading v-if="!dataReady"/>
+      <section 
+      v-show="dataReady"
+      class="data">
         <div class="report_data">
           <div class="report_unit">
             <span>單位：{{ unit }}</span>
           </div>
           <div class="report_type">
             <span
-              @click="showNotYetDialog = true"
+              @click="reportType = 'quarter'"
               :class="{ focus: reportType === 'quarter' }"
               >季報</span
             >
@@ -133,16 +136,18 @@
           </div>
         </div>
         <YearTable
-          v-show="typeOfSheet === 'balance_sheets'"
+          v-show="dataReady&&typeOfSheet === 'balance_sheets'"
           class="data_list"
+          @isReady="componentIsReady = true"
           :companyData="companyData"
           :lookUpSheet="lookUpSheet"
           :typeOfSheet="typeOfSheet"
         />
         <SubTable
+          @isReady="componentIsReady = true"
           v-show="typeOfSheet === 'per_share_ratios'"
           :lookUpSheet="lookUpSheet"
-          :dataAPI="dataAPI"
+          :dataAPI="subDataAPI"
         />
       </section>
     </main>
@@ -152,6 +157,7 @@
 <script>
 import YearTable from "./components/YearTable.vue";
 import SubTable from "./components/subTable.vue";
+import Loading from "./components/loadingAnimation.vue";
 export default {
   name: "App",
   async created() {
@@ -160,6 +166,7 @@ export default {
   },
   data() {
     return {
+      componentIsReady: false,
       lookUpSheet: [
         { english: "workingCapital", mandarin: "營運資金週期" },
         { english: "per_share_ratios", mandarin: "每股比例表" },
@@ -254,8 +261,9 @@ export default {
       dataReady: false,
       companyData: [],
       companyAPI: "https://5fbd1e2b3f8f90001638cc76.mockapi.io/reportYear2330",
-      dataAPI:
+      subDataAPI:
         "https://5fbd1e2b3f8f90001638cc76.mockapi.io/reportRatioYear2330",
+      subData: [],
       showList: "",
       nowStock: "2330",
       stockName: "",
@@ -279,9 +287,11 @@ export default {
           });
       }
       this.typeOfSheet = "balance_sheets";
+      this.reportType = 'year'
     },
     getPerShareRatio() {
       this.typeOfSheet = "per_share_ratios";
+      this.reportType = 'year'
     },
     getOperateChart() {
       this.typeOfSheet = "workingCapital";
@@ -293,7 +303,7 @@ export default {
         case "台積電":
           this.companyAPI =
             "https://5fbd1e2b3f8f90001638cc76.mockapi.io/reportYear2330";
-          this.dataAPI =
+          this.subDataAPI =
             "https://5fbd1e2b3f8f90001638cc76.mockapi.io/reportRatioYear2330";
           this.getYearReport();
           break;
@@ -301,7 +311,7 @@ export default {
         case "科風":
           this.companyAPI =
             "https://5fbf2d965923c90016e6ba2d.mockapi.io/reportYear3043";
-          this.dataAPI =
+          this.subDataAPI =
             "https://5fbf2d965923c90016e6ba2d.mockapi.io/reportRatioYear3043";
           this.getYearReport();
           break;
@@ -315,6 +325,7 @@ export default {
   components: {
     YearTable,
     SubTable,
+    Loading,
   },
   computed: {
     stockIDandName() {
@@ -337,7 +348,6 @@ export default {
 </script>
 
 <style lang="scss">
-$main_theme_color: rgba(248, 165, 39, 0.8);
 $highlight_font: #c97b22;
 * {
   color: #2c3e50;

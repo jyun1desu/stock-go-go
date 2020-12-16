@@ -8,7 +8,7 @@
         :key="'year' + data.year"
         class="year"
       >
-        {{ data.year }}<br>合併</span
+        {{ data.year }}<br />合併</span
       >
     </div>
     <div class="data_table">
@@ -35,7 +35,7 @@
 
 <script>
 export default {
-  props: ["lookUpSheet",'dataAPI'],
+  props: ["lookUpSheet", "dataAPI"],
   data() {
     return {
       typeOfSheet: "year_per_share_ratios",
@@ -44,14 +44,23 @@ export default {
     };
   },
   mounted() {
-    fetch(this.dataAPI)
-      .then((res) => res.json())
-      .then((datas) => {
-        this.companyData = datas;
-        this.dataReady = true;
-      });
+    this.getAPIdata(this.dataAPI);
+  },
+  watch: {
+    dataAPI(value) {
+      this.getAPIdata(value);
+    },
   },
   methods: {
+    getAPIdata(api) {
+      this.dataReady = false;
+      fetch(api)
+        .then((res) => res.json())
+        .then((datas) => {
+          this.companyData = datas;
+          this.dataReady = true;
+        });
+    },
     getEachYearData(valueArray, columnName) {
       const dataValue = valueArray.map((object) => {
         return {
@@ -61,14 +70,14 @@ export default {
       });
       return dataValue;
     },
-    trunIntoPercentage(number){
-      if(number<1){
-        const percent = `${(number*100).toFixed(1)}%`
-        return percent
-      }else{
-        return number
+    trunIntoPercentage(number) {
+      if (number < 1) {
+        const percent = `${(number * 100).toFixed(1)}%`;
+        return percent;
+      } else {
+        return number;
       }
-    }
+    },
   },
   computed: {
     thisTableData() {
@@ -84,7 +93,7 @@ export default {
       const withValue = this.rowsName.map((data) => {
         return {
           name: data,
-          mandarin:this.lookUpSheet.find(d=>d.english===data).mandarin,
+          mandarin: this.lookUpSheet.find((d) => d.english === data).mandarin,
           value: this.getEachYearData(this.thisTableData, data),
         };
       });
@@ -95,7 +104,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.table{
-  @include table_style; 
+.table {
+  @include table_style;
 }
 </style>
