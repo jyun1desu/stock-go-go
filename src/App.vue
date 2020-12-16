@@ -2,7 +2,9 @@
   <div id="app">
     <header>
       <div class="container">
-        <a class="logo">
+        <a 
+        @click="backToHome"
+        class="logo">
           <img src="@/assets/logo.jpg" alt="brand logo" />
         </a>
         <div class="searchbar">
@@ -273,6 +275,9 @@ export default {
     };
   },
   methods: {
+    backToHome(){
+      this.searchStockInfo('2330')
+    },
     getYearReport() {
       const same =
         this.nowStock === this.companyData.company_name ||
@@ -297,7 +302,7 @@ export default {
       this.typeOfSheet = "workingCapital";
     },
     searchStockInfo(name) {
-      this.nowStock = this.stockName;
+      this.nowStock = name;
       switch (name) {
         case "2330":
         case "台積電":
