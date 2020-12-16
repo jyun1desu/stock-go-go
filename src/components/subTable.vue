@@ -1,6 +1,6 @@
 <template>
   <div v-if="dataReady" class="table">
-    <div class="title">3043科風_每股比例表_年 單位：元、%</div>
+    <div class="title">1039台積電_每股比例表_年 單位：元、%</div>
     <div class="column_years">
       <span class="names__title">期別<br />種類</span>
       <span
@@ -26,7 +26,7 @@
           :key="eachYear.year"
           class="each_data"
         >
-          {{ eachYear.value }}
+          {{ trunIntoPercentage(eachYear.value) }}
         </div>
       </div>
     </div>
@@ -63,6 +63,14 @@ export default {
       });
       return dataValue;
     },
+    trunIntoPercentage(number){
+      if(number<1){
+        const percent = `${(number*100).toFixed(1)}%`
+        return percent
+      }else{
+        return number
+      }
+    }
   },
   computed: {
     thisTableData() {

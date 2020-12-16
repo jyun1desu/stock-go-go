@@ -1,9 +1,11 @@
 <template>
   <div class="home">
-    <SubTable :lookUpSheet="lookUpSheet" />
+    <SubTable 
+    v-if="true"
+    :lookUpSheet="lookUpSheet" />
     <YearTable 
-    :lookUpSheet="lookUpSheet"
-    v-if="false" />
+    v-if="true"
+    :lookUpSheet="lookUpSheet" />
   </div>
 </template>
 
