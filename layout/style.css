@@ -1,160 +1,150 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500;600;700&display=swap');
 
 * {
-    /* outline: 1px solid red; */
+  /* outline: 1px solid red; */
 }
 
 html{
-    min-width: 1080px;
+  min-width: 1080px;
 }
 body{
-    margin: 0;
-    font-family: 'Noto Serif JP', serif;
+  margin: 0;
+  font-family: 'Noto Serif JP', serif;
 }
 a{
-    text-decoration: none;
-    color: #000;
+  text-decoration: none;
+  color: #000;
 }
 
 
 header{
-    padding: 20px 0;
+  padding: 20px 0;
 }
 .container{
-    width: 1080px;
-    margin: 0 auto;
-    display: flex;
-    position: relative;
-    /* align-items: center; */
-}
-.logo{
-    flex: 1 0 15%;
+  width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
 }
 .logo img{
-    cursor: pointer;
-    width: 100%;
+  cursor: pointer;
+  width: 100px;
 }
-.navbar{
-    flex: 1 0 80%;
-    display: flex;
-}
-.menu{
-    flex-grow: 1;
-    display: flex;
-}
-.menu_list{
-    flex: 1 0 0;
-    text-align: center;
-}
-.dropdown_menu{
-    padding: 10px;
-    display: block;
-    font-size: 20px;
-    font-weight: 600;
-}
-.dropdown_menu i{
-    margin-right: 5px;
-    font-size: 20px;
-}
-.dropdown_item{
-    margin-bottom: 5px;
-}
-.dropdown_toggler{
-    display: flex;
-    flex-direction: column;
-}
+
 
 .searchbar{
-    flex: 1 0 5%;
-    text-align: right;
-}
-.close_search{
-    display: none;
-}
-.search_checkbox{
-    display: none;
+  margin-left: 20px;
+  flex-grow: 1;
+  position: relative;
 }
 .search_text{
-    display: none;
-    position: absolute;
-    top: 0;
-    right: 55px;
-    z-index: 2;
-    padding: 10px;
-    width: 77%;
-    font-size: 20px;
+  padding: 10px;
+  width: 65%;
+  box-sizing: border-box;
+  font-size: 18px;
 }
-.search_checkbox:checked ~ .search_text{
-    display: block;
+.search_submit{
+  padding: 10px;
+  position: absolute;
+  top: 3px;
+  right: 155px;
+  z-index: 2;
+  border: none;
+  background-color: transparent;
 }
-.searchbar i{
-    padding: 10px;
-    font-size: 22px;
-}
-.close_searchbar{
-    display: none;
-    position: absolute;
-    top: 0;
-    right: 55px;
-    z-index: 3;
-    outline: none;
-    border: none;
-    background-color: transparent;
-}
-.search_checkbox:checked ~ .close_searchbar{
-    display: block;
+.search_submit i{
+  font-size: 18px;
 }
 
-.search{
-    flex: 1 0 5%;
-    text-align: right;
+.navbar{
+  display: flex;
 }
-.search i{
-    font-size: 30px;
+.menu{
+  flex-grow: 1;
+  display: flex;
 }
+.menu_list{
+  position: relative;
+}
+.dropdown_menu{
+  padding: 10px;
+  display: block;
+  font-size: 18px;
+  font-weight: 600;
+}
+.dropdown_menu i{
+  margin-right: 5px;
+  font-size: 20px;
+}
+.dropdown_toggler{
+  display: none;
+}
+.dropdown_menu:hover ~ .dropdown_toggler{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  left: 40px;
+}
+.dropdown_item{
+  line-height: 2;
+}
+
 
 
 
 .title{
-    background-color: rgba(248, 165, 39, 0.8);
+  background-color: rgba(248, 165, 39, 0.8);
 }
 .title_content{
-    margin: 0 auto;
-    width: 1080px;
-    display: flex;
-    justify-content: space-between;
+  margin: 0 auto;
+  width: 1080px;
+  display: flex;
+  justify-content: space-between;
 }
 .title_content p{
-    font-size: 25px;
-    font-weight: 700;
+  font-size: 25px;
+  font-weight: 700;
 }
 
 
 .data{
-    margin: 0 auto;
-    width: 1080px;
-    padding: 10px 10px 30px;
-    box-sizing: border-box;
-    background-color: #fff;
+  margin: 0 auto;
+  width: 1080px;
+  padding: 10px 10px 30px;
+  box-sizing: border-box;
+  background-color: #fff;
 }
 .report_type{
-    margin: 0 auto;
-    width: 150px;
-    text-align: center;
+  margin: 0 auto;
+  width: 150px;
+  text-align: center;
+  position: relative;
 }
+/* .report_type::before{
+  content: ' ';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: 0 auto;
+  width: 2px;
+  height: 100%;
+  background-color: #000;
+} */
 .report_type span{
-    padding: 0 5px;
-    font-weight: 500px;
-    line-height: 2;
+  padding: 0 5px;
+  font-weight: 500px;
+  line-height: 2;
 }
-.report_type span:nth-child(3){
-    border-radius: 5px;
-    background-color: #ccc;
+.report_type span:last-child{
+  border-radius: 5px;
+  background-color: #ccc;
 }
 .report_unit{
-    float: right;
+  float: right;
 }
 .report_unit span{
-    line-height: 2;
+  line-height: 2;
 }
 
