@@ -177,7 +177,7 @@ $column_block_grey: #eeeeee;
 $border_color: #dbdbdb;
 $block_padding: 10px 20px 10px 0;
 $rows_name_block_color: #e4edf1;
-$ident_px: 30px;
+$ident_px: 20px;
 
 .table {
   & > .title {
@@ -193,6 +193,7 @@ $ident_px: 30px;
     .names__title {
       flex: 0 0 22%;
       text-align: left;
+      margin-left: 10px;
       padding: $block_padding;
       box-sizing: border-box;
     }
@@ -217,6 +218,7 @@ $ident_px: 30px;
       .row_name {
         flex: 0 0 22%;
         text-align: left;
+        margin-left: 10px;
         padding: $block_padding;
         box-sizing: border-box;
 
@@ -231,7 +233,7 @@ $ident_px: 30px;
         text-align: right;
 
         &.negative {
-          color: #c22626;
+          color: #d11717;
         }
       }
     }
