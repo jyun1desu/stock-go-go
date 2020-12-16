@@ -19,14 +19,16 @@
           }"
           class="row_name"
         >
-          {{ data.mandarin }}
+          {{ data.mandarin
+          }}{{ data.mandarin.includes("比例") ? "(%)" : "(元)" }}
         </div>
         <div
           v-for="eachYear in data.value"
           :key="eachYear.year"
           class="each_data"
+          :class="{ negative: eachYear.value < 0 }"
         >
-          {{ trunIntoPercentage(eachYear.value) }}
+          {{ trunIntoPercentage(eachYear.value, data) }}
         </div>
       </div>
     </div>
@@ -70,12 +72,14 @@ export default {
       });
       return dataValue;
     },
-    trunIntoPercentage(number) {
-      if (number < 1) {
-        const percent = `${(number * 100).toFixed(1)}%`;
-        return percent;
+    trunIntoPercentage(number, dataType) {
+      if (dataType.name != "EBIDTA_per_share") {
+        const percent = parseFloat((Math.abs(number) * 100).toFixed(1));
+        return number < 0 ? `(${percent})` : percent;
       } else {
-        return number;
+        return number < 0
+          ? `(${parseFloat(Math.abs(number).toFixed(1))})`
+          : parseFloat(number.toFixed(1));
       }
     },
   },

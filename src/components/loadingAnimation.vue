@@ -15,7 +15,7 @@ export default {};
 
 <style lang="scss" scoped>
 .loading{
-  padding: 30px 0;
+  padding: 30px;
   width: 100%;
   display: flex;
   justify-content: center;
