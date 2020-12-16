@@ -1,48 +1,13 @@
 <template>
-  <!-- <div class="table">
-    <div class="title">3043科風_資產負債表_年 單位：百萬</div>
-    <div class="data_table">
-      <div class="columns">
-        <p class="title">期別<br />種類</p>
-        <div class="columns__names">
-          <span
-            v-for="row in this.columnsInMandarin"
-            :key="row.column_name"
-            :class="{
-              ident: row.order === 2,
-            }"
-            class="block"
-            >{{ row.mandarin }}</span
-          >
-        </div>
-      </div>
-      <div class="rows">
-        <div
-          v-for="data in company_balance_sheet"
-          :key="'data' + data.year"
-          class="each_year"
-        >
-          <div class="year">{{ data.year }}<br>合併</div>
-          <div class="datas">
-            <span
-              v-for="(eachData, index) in data.data"
-              :key="'data' + index"
-              >{{ eachData.value }}</span
-            >
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
-  <div v-if="dataReady" class="table">
-    <div class="title">{{ tableTitle }}</div>
+  <table v-if="dataReady" class="table">
+    <!-- <div class="title">{{ tableTitle }}</div> -->
     <div class="column_years">
       <span class="names__title">期別<br />種類</span>
       <span
         v-for="data in companyData.year_balance_sheets"
         :key="data.year"
         class="year"
-        >{{ data.year }}<br>合併</span
+        >{{ data.year }}<br />合併</span
       >
     </div>
     <div class="data_table">
@@ -69,7 +34,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </table>
 </template>
 
 <script>
@@ -173,70 +138,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$column_block_grey: #eeeeee;
-$border_color: #dbdbdb;
-$block_padding: 10px 20px 10px 0;
-$rows_name_block_color: #e4edf1;
-$ident_px: 20px;
-
-.table {
-  & > .title {
-    background-color: #333333;
-    color: #fff;
-    padding: $block_padding;
-    letter-spacing: 1px;
-  }
-  .column_years {
-    display: flex;
-    background-color: $rows_name_block_color;
-    align-items: center;
-    .names__title {
-      flex: 0 0 22%;
-      text-align: left;
-      margin-left: 10px;
-      padding: $block_padding;
-      box-sizing: border-box;
-    }
-    .year {
-      flex: 0 1 10%;
-      text-align: right;
-      padding: $block_padding;
-    }
-  }
-
-  .data_table {
-    display: flex;
-    flex-direction: column;
-    .data_row {
-      display: flex;
-      align-items: center;
-      border-top: 1px solid $border_color;
-      &:nth-child(2n-1) {
-        background-color: $column_block_grey;
-      }
-
-      .row_name {
-        flex: 0 0 22%;
-        text-align: left;
-        margin-left: 10px;
-        padding: $block_padding;
-        box-sizing: border-box;
-
-        &.ident {
-          padding-left: $ident_px;
-        }
-      }
-
-      .each_data {
-        flex: 0 1 10%;
-        padding: $block_padding;
-        text-align: right;
-
-        &.negative {
-          color: #d11717;
-        }
-      }
-    }
-  }
+.table{
+  @include table_style; 
 }
 </style>
