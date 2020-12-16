@@ -63,8 +63,9 @@
           v-for="eachYear in data.eachYearData"
           :key="eachYear.year"
           class="each_data"
+          :class="{ negative: eachYear.value < 0 }"
         >
-          {{ addCommaToNumber(eachYear.value) }}
+          {{ numberFomat(eachYear.value) }}
         </div>
       </div>
     </div>
@@ -74,7 +75,7 @@
 <script>
 export default {
   name: "Table",
-  props:['lookUpSheet'],
+  props: ["lookUpSheet"],
   data() {
     return {
       typeOfSheet: "balance_sheets", //應該要從父層prop過來
@@ -125,9 +126,16 @@ export default {
       });
       return dataValue;
     },
-    addCommaToNumber(number) {
+    addComma(number) {
       const reg = /(?=(?:\d{3})+(?:\.|$))/g;
       return number.toString().split(reg).join(",");
+    },
+    numberFomat(number) {
+      if (number < 0) {
+        return `(${this.addComma(Math.abs(number))})`;
+      } else {
+        return this.addComma(number);
+      }
     },
   },
   computed: {
@@ -219,6 +227,10 @@ $ident_px: 30px;
       .each_data {
         flex: 0 1 10%;
         padding: $block_padding;
+
+        &.negative {
+          color: #c22626;
+        }
       }
     }
   }
