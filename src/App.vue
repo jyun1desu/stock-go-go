@@ -186,6 +186,7 @@ export default {
   name: "App",
   async created() {
     window.addEventListener("scroll", this.handleScroll);
+
     const lastTime = localStorage.getItem("lastTimeStock");
     if (lastTime) {
       this.searchStockInfo(lastTime);
@@ -407,6 +408,7 @@ export default {
       else return "";
     },
   },
+
   watch: {
     nowStock(value) {
       window.localStorage.setItem("lastTimeStock", value);
