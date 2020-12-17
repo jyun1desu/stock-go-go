@@ -186,10 +186,11 @@ export default {
   name: "App",
   async created() {
     window.addEventListener("scroll", this.handleScroll);
-    const lastTime = localStorage.getItem('lastTimeStock');
-    if(lastTime){
+
+    const lastTime = localStorage.getItem("lastTimeStock");
+    if (lastTime) {
       this.searchStockInfo(lastTime);
-    }else{
+    } else {
       //預設資料：資產負債表，預設公司：台積
       await this.getYearReport();
     }
@@ -342,8 +343,10 @@ export default {
       this.typeOfSheet = "workingCapital";
     },
     searchStockInfo(name) {
-      const hasThis = this.nowCanSearch.some(item=>name===(item.stock_symbol||item.company))
-      if(!hasThis) return;
+      const hasThis = this.nowCanSearch.some(
+        (item) => name === (item.stock_symbol || item.company)
+      );
+      if (!hasThis) return;
       this.nowStock = name;
       switch (name) {
         case "2330":
@@ -405,11 +408,12 @@ export default {
       else return "";
     },
   },
-  watch:{
-    nowStock(value){
-      window.localStorage.setItem('lastTimeStock',value)
-    }
-  }
+
+  watch: {
+    nowStock(value) {
+      window.localStorage.setItem("lastTimeStock", value);
+    },
+  },
 };
 </script>
 
