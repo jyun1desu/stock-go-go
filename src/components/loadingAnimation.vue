@@ -19,6 +19,7 @@ export default {};
   width: 100%;
   display: flex;
   justify-content: center;
+  box-sizing: border-box;
 }
 .lds-ellipsis {
   display: inline-block;
