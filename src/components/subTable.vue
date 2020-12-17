@@ -8,7 +8,7 @@
         :key="'year' + data.year"
         class="year"
       >
-        {{ data.year }}<br>合併</span
+        {{ data.year }}<br />合併</span
       >
     </div>
     <div class="data_table">
@@ -19,14 +19,16 @@
           }"
           class="row_name"
         >
-          {{ data.mandarin }}
+          {{ data.mandarin
+          }}{{ data.mandarin.includes("比例") ? "(%)" : "(元)" }}
         </div>
         <div
           v-for="eachYear in data.value"
           :key="eachYear.year"
           class="each_data"
+          :class="{ negative: eachYear.value < 0 }"
         >
-          {{ trunIntoPercentage(eachYear.value) }}
+          {{ trunIntoPercentage(eachYear.value, data) }}
         </div>
       </div>
     </div>
@@ -35,25 +37,32 @@
 
 <script>
 export default {
-  props: ["lookUpSheet"],
+  props: ["lookUpSheet", "dataAPI"],
   data() {
     return {
       typeOfSheet: "year_per_share_ratios",
-      dataAPI:
-        "https://5fbd1e2b3f8f90001638cc76.mockapi.io/reportRatioYear2330",
       companyData: [],
       dataReady: false,
     };
   },
   mounted() {
-    fetch(this.dataAPI)
-      .then((res) => res.json())
-      .then((datas) => {
-        this.companyData = datas;
-        this.dataReady = true;
-      });
+    this.getAPIdata(this.dataAPI);
+  },
+  watch: {
+    dataAPI(value) {
+      this.getAPIdata(value);
+    },
   },
   methods: {
+    getAPIdata(api) {
+      this.dataReady = false;
+      fetch(api)
+        .then((res) => res.json())
+        .then((datas) => {
+          this.companyData = datas;
+          this.dataReady = true;
+        });
+    },
     getEachYearData(valueArray, columnName) {
       const dataValue = valueArray.map((object) => {
         return {
@@ -63,14 +72,16 @@ export default {
       });
       return dataValue;
     },
-    trunIntoPercentage(number){
-      if(number<1){
-        const percent = `${(number*100).toFixed(1)}%`
-        return percent
-      }else{
-        return number
+    trunIntoPercentage(number, dataType) {
+      if (dataType.name != "EBIDTA_per_share") {
+        const percent = parseFloat((Math.abs(number) * 100).toFixed(1));
+        return number < 0 ? `(${percent})` : percent;
+      } else {
+        return number < 0
+          ? `(${parseFloat(Math.abs(number).toFixed(1))})`
+          : parseFloat(number.toFixed(1));
       }
-    }
+    },
   },
   computed: {
     thisTableData() {
@@ -86,7 +97,7 @@ export default {
       const withValue = this.rowsName.map((data) => {
         return {
           name: data,
-          mandarin:this.lookUpSheet.find(d=>d.english===data).mandarin,
+          mandarin: this.lookUpSheet.find((d) => d.english === data).mandarin,
           value: this.getEachYearData(this.thisTableData, data),
         };
       });
@@ -97,7 +108,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.table{
-  @include table_style; 
+.table {
+  @include table_style;
 }
 </style>

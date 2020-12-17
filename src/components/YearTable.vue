@@ -40,12 +40,10 @@
 <script>
 export default {
   name: "Table",
-  props: ["lookUpSheet"],
+  props: ["lookUpSheet",'companyData','typeOfSheet'],
   data() {
     return {
-      typeOfSheet: "balance_sheets", //應該要從父層prop過來
       companyAPI: "https://5fbf2d965923c90016e6ba2d.mockapi.io/reportYear3043", //應該要從父層prop過來
-      companyData: [],
       columns: [],
       dataReady: false,
     };
@@ -58,14 +56,8 @@ export default {
         this.columns = rowTitles.filter(
           (row) => row.table_name === "balance_sheets"
         );
-      });
-
-    //company_data
-    fetch(this.companyAPI)
-      .then((res) => res.json())
-      .then((datas) => {
-        this.companyData = datas;
-        this.dataReady = true;
+        this.dataReady=true;
+        this.$emit('isReady')
       });
   },
   methods: {
