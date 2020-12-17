@@ -4,7 +4,8 @@
       <div class="container">
         <a 
         @click="backToHome"
-        class="logo">
+        class="logo"
+        href="#">
           <img src="@/assets/logo.jpg" alt="brand logo" />
         </a>
         <div class="searchbar">
@@ -68,31 +69,22 @@
               >
               <div
                 v-show="showList === 'financialAnalysis'"
-                class="dropdown_toggler"
-              >
-                <a @click="getPerShareRatio" class="dropdown_item"
-                  >每股比例表</a
-                >
+                class="dropdown_toggler">
+                <a @click="getPerShareRatio" class="dropdown_item">每股比例表</a>
               </div>
             </div>
             <div
               @mouseenter="showList = 'grapics'"
               @mouseleave="showList = ''"
               :class="{ now_picked: showList === 'grapics' }"
-              class="menu_list"
-            >
-              <a href="##" class="dropdown_menu"
-                ><i
+              class="menu_list">
+              <a href="##" class="dropdown_menu">
+                <i
                   :class="{ open_list: showList === 'grapics' }"
-                  class="toggle_icon fas fa-caret-down fa-fw"
-                ></i
-                >技術線圖</a
-              >
+                  class="toggle_icon fas fa-caret-down fa-fw"></i>技術線圖</a>
               <div v-show="showList === 'grapics'" class="dropdown_toggler">
                 <a @click="getOperateChart" class="dropdown_item">營運分析</a>
-                <a @click="showNotYetDialog = true" class="dropdown_item"
-                  >獲利分析</a
-                >
+                <a @click="showNotYetDialog = true" class="dropdown_item">獲利分析</a>
               </div>
             </div>
             <div class="menu_list lock_function">
@@ -110,9 +102,9 @@
     </header>
     <main v-show="componentIsReady">
       <section class="title">
-        <div class="title_content">
-          <p>{{ stockIDandName }}</p>
-          <p>{{ sheetNameInMandarin }}</p>
+        <div class="title_content"> <!--scrollup-->
+          <p class="title_text">{{ stockIDandName }}</p> <!--scrollup_text-->
+          <p class="title_text">{{ sheetNameInMandarin }}</p> <!--scrollup_text-->
         </div>
       </section>
       <Loading v-if="!dataReady"/>
@@ -126,15 +118,16 @@
           <div class="report_type">
             <span
               @click="reportType = 'quarter'"
-              :class="{ focus: reportType === 'quarter' }"
-              >季報</span
-            >
+              :class="{ focus: reportType === 'quarter' }" 
+              class="active">
+              季報
+            </span>
             <!-- <span> | </span> -->
             <span
               @click="reportType = 'year'"
               :class="{ focus: reportType === 'year' }"
-              >年報</span
-            >
+              class="active">
+              年報</span>
           </div>
         </div>
         <YearTable
@@ -153,6 +146,9 @@
         />
       </section>
     </main>
+    <footer>
+      <a href="#" class="back">BACK TO TOP</a>
+    </footer>
   </div>
 </template>
 
@@ -381,6 +377,7 @@ header {
   width: 1080px;
   margin: 0 auto;
   display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 .logo img {
@@ -390,11 +387,13 @@ header {
 
 .searchbar {
   margin-left: 20px;
-  flex: 0 0 30%;
+  flex: 0 0 30%; // jyunyi
+  flex-grow: 1; // teen
   position: relative;
 }
 .search_text {
-  width: 100%;
+  padding: 10px;
+  width: 65%;
   box-sizing: border-box;
   padding: 10px;
   border-radius: 2px;
@@ -414,7 +413,7 @@ header {
 .search_submit {
   position: absolute;
   top: 50%;
-  right: 0;
+  right: 160px;
   transform: translate(-20%, -50%);
   border: none;
   background-color: transparent;
@@ -451,7 +450,7 @@ header {
   .dropdown_menu {
     padding: 10px;
     display: block;
-    font-size: 16px;
+    font-size: 18px;
     letter-spacing: 2px;
     font-weight: 400;
     position: relative;
@@ -494,19 +493,42 @@ header {
   }
 }
 
+.main {
+  overflow: auto;
+}
+
 .title {
   background-color: $main_theme_color;
 }
 .title_content {
   margin: 0 auto;
+  padding: 50px 10px;
   width: 1080px;
+  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
 }
-.title_content p {
+.title_text {
+  margin: 0;
   font-size: 30px;
   font-weight: 200;
   letter-spacing: 1px;
+}
+
+.scrollup_top{
+  // position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+/* scrollup之後，標題區域padding縮小 */
+.scrollup{
+  padding: 10px;
+}
+/* scrollup之後，標題區域字級縮小 */
+.scrollup_text{
+  font-size: 20px;
 }
 
 .data {
@@ -520,11 +542,13 @@ header {
     margin: 10px auto 20px;
     width: 150px;
     text-align: center;
+
     span {
       cursor: pointer;
       padding: 5px 15px;
       font-weight: 500px;
       line-height: 2;
+      padding: 5px;
 
       &:last-child {
         margin-left: 10px;
@@ -541,5 +565,17 @@ header {
   .report_unit span {
     line-height: 2;
   }
+}
+footer {
+  padding: 20px 0;
+}
+.back {
+  margin: 0 auto;
+  padding: 10px;
+  display: block;
+  width: 150px;
+  border-radius: 5px;
+  background-color: #FAB75B;
+  text-align: center;
 }
 </style>
