@@ -186,10 +186,11 @@ export default {
   name: "App",
   async created() {
     window.addEventListener("scroll", this.handleScroll);
-
-    const lastTime = localStorage.getItem("lastTimeStock");
-    if (lastTime) {
-      this.searchStockInfo(lastTime);
+    const lastTimeStock = localStorage.getItem("lastTimeStock");
+    const lastTimeSheetType = localStorage.getItem("lastTimeSheetType");
+    if (lastTimeStock) {
+      this.searchStockInfo(lastTimeStock);
+      if (lastTimeSheetType) this.typeOfSheet = lastTimeSheetType;
     } else {
       //預設資料：資產負債表，預設公司：台積
       await this.getYearReport();
@@ -412,6 +413,9 @@ export default {
   watch: {
     nowStock(value) {
       window.localStorage.setItem("lastTimeStock", value);
+    },
+    typeOfSheet(value) {
+      window.localStorage.setItem("lastTimeSheetType", value);
     },
   },
 };
