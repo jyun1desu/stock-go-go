@@ -10,6 +10,7 @@
             @submit.prevent="searchStockInfo(stockName)"
             action=""
             id="searchbar"
+            class="search_area"
           >
             <input
               v-model="stockName"
@@ -22,6 +23,19 @@
               <i class="fas fa-search"></i>
             </button>
           </form>
+          <div v-if="searchResultList" class="result_list">
+            <span
+              @click="searchStockInfo(item.stock_symbol)"
+              class="each_result"
+              v-for="(item, index) in searchResultList"
+              :key="'result' + index"
+              >{{
+                item.company
+                  ? `${item.stock_symbol} ${item.company}`
+                  : item.warn
+              }}</span
+            >
+          </div>
         </div>
         <nav class="navbar">
           <div class="menu">
@@ -281,6 +295,10 @@ export default {
       reportType: "year",
       showNotYetDialog: false,
       stickTheBar: false,
+      nowCanSearch: [
+        { company: "台積電", stock_symbol: "2330" },
+        { company: "科風", stock_symbol: "3043" },
+      ],
     };
   },
   methods: {
@@ -351,6 +369,19 @@ export default {
     Loading,
   },
   computed: {
+    searchResultList() {
+      const input = this.stockName;
+      if (input) {
+        const list = this.nowCanSearch.filter((data) => {
+          return (
+            data.company.includes(input) || data.stock_symbol.includes(input)
+          );
+        });
+        return list.length ? list : [{ warn: `查無 ${input} 的相關資訊` }];
+      } else {
+        return false;
+      }
+    },
     stockIDandName() {
       const id = this.companyData["stock_symbol"];
       const companyName = this.companyData["company_name"];
@@ -410,41 +441,62 @@ header {
   margin-left: 20px;
   flex: 0 0 30%; // jyunyi
   position: relative;
-}
-.search_text {
-  padding: 10px;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 10px;
-  border-radius: 2px;
-  border: 1px solid #333;
-  font-size: 18px;
-  letter-spacing: 2px;
 
-  &:focus {
-    outline: none;
-    border: 2px solid $main_theme_color;
+  .search_area {
+    position: relative;
   }
-  &::placeholder {
-    letter-spacing: 1px;
-    font-size: 16px;
+  .search_text {
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    border-radius: 2px;
+    border: 1px solid #333;
+    font-size: 18px;
+    letter-spacing: 2px;
+
+    &:focus {
+      outline: none;
+      border: 2px solid $main_theme_color;
+    }
+    &::placeholder {
+      letter-spacing: 1px;
+      font-size: 16px;
+    }
   }
-}
-.search_submit {
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  border: none;
-  background-color: transparent;
-  &:focus {
-    outline: none;
+  .search_submit {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    border: none;
+    background-color: transparent;
+    &:focus {
+      outline: none;
+    }
+    i {
+      font-size: 18px;
+      &:hover {
+        color: $main_theme_color;
+      }
+    }
   }
-}
-.search_submit i {
-  font-size: 18px;
-  &:hover {
-    color: $main_theme_color;
+  .result_list {
+    position: absolute;
+    width: 100%;
+    background-color: rgba(255,255,255,0.95);
+    margin-top: 5px;
+    padding: 2px;
+    box-sizing: border-box;
+    .each_result {
+      cursor:pointer;
+      display: block;
+      padding: 10px;
+      box-sizing: border-box;
+      &:hover {
+        background-color: #f3f3f3;
+      }
+    }
   }
 }
 
