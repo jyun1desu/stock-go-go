@@ -1,11 +1,8 @@
 <template>
   <div id="app">
-    <header>
+    <header ref="header">
       <div class="container">
-        <a 
-        @click="backToHome"
-        class="logo"
-        href="#">
+        <a @click="backToHome" class="logo" href="#">
           <img src="@/assets/logo.jpg" alt="brand logo" />
         </a>
         <div class="searchbar">
@@ -69,22 +66,31 @@
               >
               <div
                 v-show="showList === 'financialAnalysis'"
-                class="dropdown_toggler">
-                <a @click="getPerShareRatio" class="dropdown_item">每股比例表</a>
+                class="dropdown_toggler"
+              >
+                <a @click="getPerShareRatio" class="dropdown_item"
+                  >每股比例表</a
+                >
               </div>
             </div>
             <div
               @mouseenter="showList = 'grapics'"
               @mouseleave="showList = ''"
               :class="{ now_picked: showList === 'grapics' }"
-              class="menu_list">
+              class="menu_list"
+            >
               <a href="##" class="dropdown_menu">
                 <i
                   :class="{ open_list: showList === 'grapics' }"
-                  class="toggle_icon fas fa-caret-down fa-fw"></i>技術線圖</a>
+                  class="toggle_icon fas fa-caret-down fa-fw"
+                ></i
+                >技術線圖</a
+              >
               <div v-show="showList === 'grapics'" class="dropdown_toggler">
                 <a @click="getOperateChart" class="dropdown_item">營運分析</a>
-                <a @click="showNotYetDialog = true" class="dropdown_item">獲利分析</a>
+                <a @click="showNotYetDialog = true" class="dropdown_item"
+                  >獲利分析</a
+                >
               </div>
             </div>
             <div class="menu_list lock_function">
@@ -100,17 +106,18 @@
         </nav>
       </div>
     </header>
-    <main v-show="componentIsReady">
-      <section class="title">
-        <div class="title_content"> <!--scrollup-->
-          <p class="title_text">{{ stockIDandName }}</p> <!--scrollup_text-->
-          <p class="title_text">{{ sheetNameInMandarin }}</p> <!--scrollup_text-->
+    <main :class="{ scrollup_top: stickTheBar }" v-show="componentIsReady">
+      <section :class="{ scrollup_top: stickTheBar }" class="title">
+        <div class="title_content">
+          <!--scrollup-->
+          <p class="title_text">{{ stockIDandName }}</p>
+          <!--scrollup_text-->
+          <p class="title_text">{{ sheetNameInMandarin }}</p>
+          <!--scrollup_text-->
         </div>
       </section>
-      <Loading v-if="!dataReady"/>
-      <section 
-      v-show="dataReady"
-      class="data">
+      <Loading v-if="!dataReady" />
+      <section v-show="dataReady" class="data">
         <div class="report_data">
           <div class="report_unit">
             <span>單位：{{ unit }}</span>
@@ -118,20 +125,23 @@
           <div class="report_type">
             <span
               @click="reportType = 'quarter'"
-              :class="{ focus: reportType === 'quarter' }" 
-              class="active">
+              :class="{ focus: reportType === 'quarter' }"
+              class="active"
+            >
               季報
             </span>
             <!-- <span> | </span> -->
             <span
               @click="reportType = 'year'"
               :class="{ focus: reportType === 'year' }"
-              class="active">
-              年報</span>
+              class="active"
+            >
+              年報</span
+            >
           </div>
         </div>
         <YearTable
-          v-show="dataReady&&typeOfSheet === 'balance_sheets'"
+          v-show="dataReady && typeOfSheet === 'balance_sheets'"
           class="data_list"
           @isReady="componentIsReady = true"
           :companyData="companyData"
@@ -144,6 +154,7 @@
           :lookUpSheet="lookUpSheet"
           :dataAPI="subDataAPI"
         />
+        <LineChart v-show="typeOfSheet === 'workingCapital'" />
       </section>
     </main>
     <footer>
@@ -155,11 +166,13 @@
 <script>
 import YearTable from "./components/YearTable.vue";
 import SubTable from "./components/subTable.vue";
+import LineChart from "./components/lineChart.vue";
 import Loading from "./components/loadingAnimation.vue";
 export default {
   name: "App",
   async created() {
     //預設資料：資產負債表，預設公司：台積電
+    window.addEventListener("scroll", this.handleScroll);
     await this.getYearReport();
   },
   data() {
@@ -261,18 +274,26 @@ export default {
       companyAPI: "https://5fbd1e2b3f8f90001638cc76.mockapi.io/reportYear2330",
       subDataAPI:
         "https://5fbd1e2b3f8f90001638cc76.mockapi.io/reportRatioYear2330",
-      subData: [],
       showList: "",
       nowStock: "2330",
       stockName: "",
       typeOfSheet: "balance_sheets",
       reportType: "year",
       showNotYetDialog: false,
+      stickTheBar: false,
     };
   },
   methods: {
-    backToHome(){
-      this.searchStockInfo('2330')
+    handleScroll() {
+      const offsetTop = this.$refs.header.clientHeight;
+      if (window.scrollY > offsetTop) {
+        this.stickTheBar = true;
+      } else {
+        this.stickTheBar = false;
+      }
+    },
+    backToHome() {
+      this.searchStockInfo("2330");
     },
     getYearReport() {
       const same =
@@ -288,11 +309,11 @@ export default {
           });
       }
       this.typeOfSheet = "balance_sheets";
-      this.reportType = 'year'
+      this.reportType = "year";
     },
     getPerShareRatio() {
       this.typeOfSheet = "per_share_ratios";
-      this.reportType = 'year'
+      this.reportType = "year";
     },
     getOperateChart() {
       this.typeOfSheet = "workingCapital";
@@ -326,6 +347,7 @@ export default {
   components: {
     YearTable,
     SubTable,
+    LineChart,
     Loading,
   },
   computed: {
@@ -377,7 +399,6 @@ header {
   width: 1080px;
   margin: 0 auto;
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 .logo img {
@@ -388,12 +409,11 @@ header {
 .searchbar {
   margin-left: 20px;
   flex: 0 0 30%; // jyunyi
-  flex-grow: 1; // teen
   position: relative;
 }
 .search_text {
   padding: 10px;
-  width: 65%;
+  width: 100%;
   box-sizing: border-box;
   padding: 10px;
   border-radius: 2px;
@@ -413,8 +433,8 @@ header {
 .search_submit {
   position: absolute;
   top: 50%;
-  right: 160px;
-  transform: translate(-20%, -50%);
+  right: 10px;
+  transform: translateY(-50%);
   border: none;
   background-color: transparent;
   &:focus {
@@ -493,16 +513,32 @@ header {
   }
 }
 
-.main {
+main {
   overflow: auto;
+  &.scrollup_top {
+    padding-top: 80px;
+  }
 }
 
 .title {
   background-color: $main_theme_color;
+  &.scrollup_top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    .title_content {
+      padding: 10px;
+    }
+    .title_text {
+      font-size: 20px;
+    }
+  }
 }
 .title_content {
   margin: 0 auto;
   padding: 50px 10px;
+  transition: all 0.5s;
   width: 1080px;
   box-sizing: border-box;
   display: flex;
@@ -513,22 +549,6 @@ header {
   font-size: 30px;
   font-weight: 200;
   letter-spacing: 1px;
-}
-
-.scrollup_top{
-  // position: sticky;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 2;
-}
-/* scrollup之後，標題區域padding縮小 */
-.scrollup{
-  padding: 10px;
-}
-/* scrollup之後，標題區域字級縮小 */
-.scrollup_text{
-  font-size: 20px;
 }
 
 .data {
@@ -575,7 +595,7 @@ footer {
   display: block;
   width: 150px;
   border-radius: 5px;
-  background-color: #FAB75B;
+  background-color: $main_theme_color;
   text-align: center;
 }
 </style>
