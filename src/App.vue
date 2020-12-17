@@ -185,9 +185,14 @@ import Loading from "./components/loadingAnimation.vue";
 export default {
   name: "App",
   async created() {
-    //預設資料：資產負債表，預設公司：台積電
     window.addEventListener("scroll", this.handleScroll);
-    await this.getYearReport();
+    const lastTime = localStorage.getItem("lastTimeStock");
+    if (lastTime) {
+      this.searchStockInfo(lastTime);
+    } else {
+      //預設資料：資產負債表，預設公司：台積
+      await this.getYearReport();
+    }
   },
   data() {
     return {
@@ -337,6 +342,10 @@ export default {
       this.typeOfSheet = "workingCapital";
     },
     searchStockInfo(name) {
+      const hasThis = this.nowCanSearch.some(
+        (item) => name === (item.stock_symbol || item.company)
+      );
+      if (!hasThis) return;
       this.nowStock = name;
       switch (name) {
         case "2330":
@@ -396,6 +405,11 @@ export default {
       if (this.typeOfSheet === "per_share_ratios") return "元、%";
       if (this.typeOfSheet === "workingCapital") return "X軸：年/Y軸：天";
       else return "";
+    },
+  },
+  watch: {
+    nowStock(value) {
+      window.localStorage.setItem("lastTimeStock", value);
     },
   },
 };
@@ -484,12 +498,12 @@ header {
   .result_list {
     position: absolute;
     width: 100%;
-    background-color: rgba(255,255,255,0.95);
+    background-color: rgba(255, 255, 255, 0.95);
     margin-top: 5px;
     padding: 2px;
     box-sizing: border-box;
     .each_result {
-      cursor:pointer;
+      cursor: pointer;
       display: block;
       padding: 10px;
       box-sizing: border-box;
