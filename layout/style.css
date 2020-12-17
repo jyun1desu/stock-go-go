@@ -1,21 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500;600;700&display=swap');
-
-* {
-  /* outline: 1px solid red; */
-}
-
 html{
   min-width: 1080px;
 }
 body{
   margin: 0;
-  font-family: 'Noto Serif JP', serif;
 }
 a{
   text-decoration: none;
   color: #000;
 }
-
 
 header{
   padding: 20px 0;
@@ -25,12 +17,12 @@ header{
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .logo img{
   cursor: pointer;
   width: 100px;
 }
-
 
 .searchbar{
   margin-left: 20px;
@@ -70,7 +62,7 @@ header{
   padding: 10px;
   display: block;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 400;
 }
 .dropdown_menu i{
   margin-right: 5px;
@@ -89,28 +81,47 @@ header{
   line-height: 2;
 }
 
-
-
-
+.main{
+  overflow: auto;
+}
 .title{
-  background-color: rgba(248, 165, 39, 0.8);
+  background-color: #FAB75B;
 }
 .title_content{
   margin: 0 auto;
+  padding: 50px 10px;
   width: 1080px;
+  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
 }
-.title_content p{
-  font-size: 25px;
-  font-weight: 700;
+.title_text{
+  margin: 0;
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1;
+}
+/* scrollup之後，標題區域sticky釘在首列 */
+.scrollup_top{
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+/* scrollup之後，標題區域padding縮小 */
+.scrollup{
+  /* padding: 10px; */
+}
+/* scrollup之後，標題區域字級縮小 */
+.scrollup_text{
+  /* font-size: 20px; */
 }
 
-
 .data{
-  margin: 0 auto;
+  margin: 0px auto;
   width: 1080px;
-  padding: 10px 10px 30px;
+  padding: 20px 10px;
   box-sizing: border-box;
   background-color: #fff;
 }
@@ -120,7 +131,7 @@ header{
   text-align: center;
   position: relative;
 }
-/* .report_type::before{
+.report_type::before{
   content: ' ';
   position: absolute;
   left: 0;
@@ -130,20 +141,35 @@ header{
   margin: 0 auto;
   width: 2px;
   height: 100%;
-  background-color: #000;
-} */
+  background-color: #ccc;
+}
 .report_type span{
-  padding: 0 5px;
-  font-weight: 500px;
+  padding: 5px;
   line-height: 2;
 }
-.report_type span:last-child{
+.report_type span.active{
   border-radius: 5px;
   background-color: #ccc;
+}
+.report_type span + span{
+  margin-left: 15px;
 }
 .report_unit{
   float: right;
 }
 .report_unit span{
   line-height: 2;
+}
+
+footer{
+  padding: 20px 0;
+}
+.back{
+  margin: 0 auto;
+  padding: 10px;
+  display: block;
+  width: 150px;
+  border-radius: 5px;
+  background-color: #FAB75B;
+  text-align: center;
 }
