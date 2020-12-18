@@ -542,7 +542,7 @@ $highlight_font: #c97b22;
 }
 
 html {
-  // min-width: 1080px;
+  min-width: 1080px;
 }
 body {
   margin: 0;
@@ -556,7 +556,7 @@ header {
   padding: 20px 0;
 }
 .container {
-  // width: 1080px;
+  width: 1080px;
   margin: 0 auto;
   display: flex;
   align-items: center;

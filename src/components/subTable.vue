@@ -1,19 +1,19 @@
 <template>
   <table v-if="dataReady" class="table">
     <!-- <div class="title">1039台積電_每股比例表_年 單位：元、%</div> -->
-    <div class="column_years">
-      <span class="names__title">期別<br />種類</span>
-      <span
+    <tr class="column_years">
+      <td class="names__title">期別<br />種類</td>
+      <td
         v-for="data in thisTableData"
         :key="'year' + data.year"
         class="year"
       >
-        {{ data.year }}<br />合併</span
+        {{ data.year }}<br />合併</td
       >
-    </div>
-    <div class="data_table">
-      <div v-for="data in rowsNameWithValue" :key="data.name" class="data_row">
-        <div
+    </tr>
+    <!-- <div class="data_table"> -->
+      <tr v-for="data in rowsNameWithValue" :key="data.name" class="data_row">
+        <td
           :class="{
             ident: data.order === 2,
           }"
@@ -21,17 +21,17 @@
         >
           {{ data.mandarin
           }}{{ data.mandarin.includes("比例") ? "(%)" : "(元)" }}
-        </div>
-        <div
+        </td>
+        <td
           v-for="eachYear in data.value"
           :key="eachYear.year"
           class="each_data"
           :class="{ negative: eachYear.value < 0 }"
         >
           {{ trunIntoPercentage(eachYear.value, data) }}
-        </div>
-      </div>
-    </div>
+        </td>
+      </tr>
+    <!-- </div> -->
   </table>
 </template>
 

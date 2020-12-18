@@ -6,7 +6,7 @@
         <td class="names__title">期別<br />種類</td>
         <td
           v-for="data in companyData.year_balance_sheets"
-          :key="data.year"
+          :key="'column'+data.year"
           class="year"
         >
           {{ data.year }}<br />合併
@@ -18,37 +18,18 @@
         class="data_row"
       >
         <td
-          nowrap="nowrap"
+          v-for="item in setDataOrder(data)"
+          :key="item.key+item.value"
+          :nowrap="item.key === 'name' ? 'nowrap' : 'wrap'"
           :class="{
-            ident: needIdent(data.name),
+            row_name: item.key === 'name',
+            each_data: item.key !== 'name',
+            ident: item.key === 'name' ? needIdent(item.value) : false,
           }"
-          class="row_name"
         >
-          {{ translateToMandarin(data.name) }}
-        </td>
-        <td :class="{ negative: data['2019'] < 0 }" class="each_data">
-          {{ numberFomat(data["2019"]) }}
-        </td>
-        <td :class="{ negative: data['2018'] < 0 }" class="each_data">
-          {{ numberFomat(data["2018"]) }}
-        </td>
-        <td :class="{ negative: data['2017'] < 0 }" class="each_data">
-          {{ numberFomat(data["2017"]) }}
-        </td>
-        <td :class="{ negative: data['2016'] < 0 }" class="each_data">
-          {{ numberFomat(data["2016"]) }}
-        </td>
-        <td :class="{ negative: data['2015'] < 0 }" class="each_data">
-          {{ numberFomat(data["2015"]) }}
-        </td>
-        <td :class="{ negative: data['2014'] < 0 }" class="each_data">
-          {{ numberFomat(data["2014"]) }}
-        </td>
-        <td :class="{ negative: data['2013'] < 0 }" class="each_data">
-          {{ numberFomat(data["2013"]) }}
-        </td>
-        <td :class="{ negative: data['2012'] < 0 }" class="each_data">
-          {{ numberFomat(data["2012"]) }}
+          {{
+            item.key === "name" ? translateToMandarin(item.value) : item.value
+          }}
         </td>
       </tr>
     </table>
@@ -78,28 +59,16 @@ export default {
     this.$emit("isReady");
   },
   methods: {
-    // translateToMandarin(lookUpSheet, data) {
-    //   const translated = data.map((item) => {
-    //     const mandarin = lookUpSheet.find(
-    //       (title) => title.english === item.column_name
-    //     ).mandarin;
-    //     const newItem = {
-    //       ...item,
-    //       mandarin: mandarin,
-    //     };
-    //     return newItem;
-    //   });
-    //   return translated;
-    // },
-    // getEachYearData(valueArray, columnName) {
-    //   const dataValue = valueArray.map((object) => {
-    //     return {
-    //       year: object.year,
-    //       value: object[`${columnName}`],
-    //     };
-    //   });
-    //   return dataValue;
-    // },
+    setDataOrder(data) {
+      const orderedKey = Object.keys(data).reverse();
+      const orderedArray = orderedKey.map((keyName) => {
+        return {
+          key: keyName,
+          value: data[keyName],
+        };
+      });
+      return orderedArray;
+    },
     translateToMandarin(englishName) {
       const mandarin = this.lookUpSheet.find(
         (item) => item.english === englishName
@@ -107,12 +76,9 @@ export default {
       return mandarin;
     },
     getYearsData(dataArray, valueObject) {
-      dataArray
-        .slice()
-        .reverse()
-        .forEach((data) => {
-          valueObject[`${data.year}`] = data[`${valueObject.name}`];
-        });
+      dataArray.forEach((data) => {
+        valueObject[`${data.year}`] = data[`${valueObject.name}`];
+      });
     },
     addComma(number) {
       const reg = /(?=(?:\d{3})+(?:\.|$))/g;
@@ -137,30 +103,17 @@ export default {
       const sheetType = `year_${this.typeOfSheet}`;
       return this.companyData[sheetType];
     },
-    // valueNameInMandarin() {
-    //   return this.translateToMandarin(this.lookUpSheet, this.columns);
-    // },
-    // rowNameWithData() {
-    //   if (this.dataReady) {
-    //     const withValue = this.valueNameInMandarin.map((data) => {
-    //       const eachYearData = this.getEachYearData(
-    //         this.companyData.year_balance_sheets,
-    //         data.column_name
-    //       );
-    //       return { ...data, eachYearData };
-    //     });
-    //     return withValue;
-    //   } else {
-    //     return [];
-    //   }
-    // },
     columnsWithData() {
-      const resultArray = this.columns.map((item) => {
-        const obj = { name: item.column_name };
-        this.getYearsData(this.sheetData, obj);
-        return obj;
-      });
-      return resultArray;
+      if (this.sheetData) {
+        const resultArray = this.columns.map((item) => {
+          const obj = { name: item.column_name };
+          this.getYearsData(this.sheetData, obj);
+          return obj;
+        });
+        return resultArray;
+      } else {
+        return {};
+      }
     },
     tableTitle() {
       if (this.dataReady) {
