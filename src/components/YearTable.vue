@@ -42,7 +42,6 @@
 <script>
 export default {
   name: "Table",
-  props: ["lookUpSheet", "companyData", "typeOfSheet"],
   data() {
     return {
       columns: [],
@@ -55,7 +54,6 @@ export default {
   },
   methods: {
     async getColumns() {
-      console.log(this.typeOfSheet)
       await fetch("https://5fbd1e2b3f8f90001638cc76.mockapi.io/layer")
         .then((res) => res.json())
         .then((rowTitles) => {
@@ -106,6 +104,12 @@ export default {
     },
   },
   computed: {
+    lookUpSheet(){
+      return this.$store.state.lookUpSheet
+    },
+    companyData(){
+      return this.$store.state.companyData
+    },
     sheetData() {
       const sheetType = `year_${this.typeOfSheet}`;
       return this.companyData[sheetType];
@@ -134,12 +138,27 @@ export default {
         return "";
       }
     },
+    typeOfSheet(){
+      return this.$store.state.typeOfSheet
+    },
+    a(){
+      return this.$store.state.dataReady;
+    }
   },
   watch:{
     typeOfSheet(){
       this.dataReady = false;
       this.getColumns()
     }
+  },
+  async beforeRouteUpdate(to,from,next){
+
+      this.$store.commit('switchDataType', to.params.type);
+      await this.$store.commit('setDataStatus', false);
+      await this.$store.dispatch('setCompanyData', {
+        companyID: to.params.companyID
+      });
+    next();
   }
 };
 </script>

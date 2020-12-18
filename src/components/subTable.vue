@@ -19,12 +19,16 @@
         :class="{
           row_name: item.key === 'name',
           each_data: item.key !== 'name',
-          negative: item.value<0
+          negative: item.value < 0,
         }"
       >
         {{
           item.key === "name"
-            ? `${translateToMandarin(item.value)}${translateToMandarin(item.value).includes("比例") ? '(%)' : '(元)'}`
+            ? `${translateToMandarin(item.value)}${
+                translateToMandarin(item.value).includes("比例")
+                  ? "(%)"
+                  : "(元)"
+              }`
             : trunIntoPercentage(item.value, data)
         }}
       </td>
@@ -35,7 +39,6 @@
 
 <script>
 export default {
-  props: ["lookUpSheet", "dataAPI"],
   data() {
     return {
       typeOfSheet: "year_per_share_ratios",
@@ -103,6 +106,12 @@ export default {
     },
   },
   computed: {
+    dataAPI(){
+      return this.$store.state.subDataAPI;
+    },
+    lookUpSheet() {
+      return this.$store.state.lookUpSheet;
+    },
     thisTableData() {
       return this.companyData[this.typeOfSheet];
     },
