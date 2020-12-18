@@ -1,49 +1,50 @@
 <template>
+<div>
   <table v-if="dataReady" class="table">
-    <!-- <div class="title">{{ tableTitle }}</div> -->
-    <div class="column_years">
-      <span class="names__title">期別<br />種類</span>
-      <span
+    <!-- <caption class="title">{{ tableTitle }}</caption> -->
+    <tr class="column_years">
+      <td class="names__title">期別<br />種類</td>
+      <td
         v-for="data in companyData.year_balance_sheets"
         :key="data.year"
         class="year"
-        >{{ data.year }}<br />合併</span
       >
-    </div>
-    <div class="data_table">
-      <div
-        v-for="data in rowNameWithData"
-        :key="data.column_name"
-        class="data_row"
+        {{ data.year }}<br />合併
+      </td>
+    </tr>
+    <tr
+      v-for="data in rowNameWithData"
+      :key="data.column_name"
+      class="data_row"
+    >
+      <td
+      nowrap="nowrap"
+        :class="{
+          ident: data.order === 2,
+        }"
+        class="row_name"
       >
-        <div
-          :class="{
-            ident: data.order === 2,
-          }"
-          class="row_name"
-        >
-          {{ data.mandarin }}
-        </div>
-        <div
-          v-for="eachYear in data.eachYearData"
-          :key="eachYear.year"
-          class="each_data"
-          :class="{ negative: eachYear.value < 0 }"
-        >
-          {{ numberFomat(eachYear.value) }}
-        </div>
-      </div>
-    </div>
+        {{ data.mandarin }}
+      </td>
+      <td
+        v-for="eachYear in data.eachYearData"
+        :key="eachYear.year"
+        class="each_data"
+        :class="{ negative: eachYear.value < 0 }"
+      >
+        {{ numberFomat(eachYear.value) }}
+      </td>
+    </tr>
   </table>
+</div>
 </template>
 
 <script>
 export default {
   name: "Table",
-  props: ["lookUpSheet",'companyData','typeOfSheet'],
+  props: ["lookUpSheet", "companyData", "typeOfSheet"],
   data() {
     return {
-      companyAPI: "https://5fbf2d965923c90016e6ba2d.mockapi.io/reportYear3043", //應該要從父層prop過來
       columns: [],
       dataReady: false,
     };
@@ -56,8 +57,8 @@ export default {
         this.columns = rowTitles.filter(
           (row) => row.table_name === "balance_sheets"
         );
-        this.dataReady=true;
-        this.$emit('isReady')
+        this.dataReady = true;
+        this.$emit("isReady");
       });
   },
   methods: {
@@ -130,7 +131,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.table{
-  @include table_style; 
+.table {
+  @include table_style;
 }
 </style>

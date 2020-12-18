@@ -200,6 +200,115 @@ export default {
     return {
       componentIsReady: false,
       lookUpSheet: [
+        {
+          english: "earnings_before_interest_and_tax",
+          mandarin: "稅前息前淨利",
+        },
+        {
+          english: "EBIDTA",
+          mandarin: "稅前息前折舊前淨利－EBIDTA",
+        },
+        {
+          english: "EPS",
+          mandarin: "每股盈餘－完全稀釋－EPS",
+        },
+        {
+          english: "income_tax_expense",
+          mandarin: "所得稅費用",
+        },
+        {
+          english: "gains_and_losses_from_continuing_operations",
+          mandarin: "繼續營業單位損益",
+        },
+        {
+          english: "consolidated_net_income",
+          mandarin: "合併總損益",
+        },
+        {
+          english: "other_comprehensive_income_OCI",
+          mandarin: "其他綜合損益－OCI	",
+        },
+        {
+          english: "total_comprehensive_income",
+          mandarin: "本期綜合損益總額",
+        },
+        {
+          english: "net_operating_revenue",
+          mandarin: "營業收入淨額",
+        },
+        {
+          english: "cost_of_goods_sold",
+          mandarin: "營業成本",
+        },
+        {
+          english: "realized_gross_profit",
+          mandarin: "已實現銷貨毛利",
+        },
+        {
+          english: "operating_expenses",
+          mandarin: "營業費用",
+        },
+        {
+          english: "other_gains_and_losses",
+          mandarin: "其他收益及費損淨額",
+        },
+        {
+          english: "operating_income",
+          mandarin: "營業利益",
+        },
+        {
+          english: "total_non_operating_revenue_and_expense",
+          mandarin: "營業外收入及支出",
+        },
+        {
+          english: "income_before_tax",
+          mandarin: "稅前淨利",
+        },
+        {
+          english: "cash_dividends_paids_CFF",
+          mandarin: "支付現金股利-CFF",
+        },
+        {
+          english: "cash_flow_from_fundraising",
+          mandarin: "籌資活動之現金流量	(增加)減少-CFO",
+        },
+        {
+          english: "cash_flow_during_this_period",
+          mandarin: "本期產生現金流量	(增加)減少-CFO",
+        },
+        {
+          english: "decrease_increase_in_accounts_receivable_CFO",
+          mandarin: "應收帳款(增加)減少-CFO",
+        },
+        {
+          english: "decrease_increase_in_inventories_CFO",
+          mandarin: "存貨(增加)減少-CFO",
+        },
+        {
+          english: "increase_decrease_in_account_payable_CTO",
+          mandarin: "應付帳款增加(減少)-CTO",
+        },
+        {
+          english: "cash_flows_from_operations",
+          mandarin: "來自營運之現金流量",
+        },
+        {
+          english: "purchases_of_property_plant_equipment_include_prepaid_CFI",
+          mandarin: "購置不動產廠房設備(含預付)-CFI",
+        },
+        {
+          english: "disposals_of_property_plant_equipment_include_prepaid_CFI",
+          mandarin: "處分不動產廠房設備(含預付)-CFI",
+        },
+        {
+          english: "cash_flow_from_investment_activities",
+          mandarin: "投資活動之現金流量",
+        },
+        { english: "income_statements", mandarin: "綜合損益表" },
+        { english: "profit_before_tax_CFO", mandarin: "稅前淨利－CFO" },
+        { english: "depreciation_CFO", mandarin: "折舊－CFO" },
+        { english: "amortization_CFO", mandarin: "攤提－CFO	" },
+        { english: "cash_flow_statements", mandarin: "現金流量表" },
         { english: "workingCapital", mandarin: "營運資金週期" },
         { english: "per_share_ratios", mandarin: "每股比例表" },
         { english: "EBIDTA_per_share", mandarin: "每股EBIDTA" },
@@ -433,7 +542,7 @@ $highlight_font: #c97b22;
 }
 
 html {
-  min-width: 1080px;
+  // min-width: 1080px;
 }
 body {
   margin: 0;
@@ -447,7 +556,7 @@ header {
   padding: 20px 0;
 }
 .container {
-  width: 1080px;
+  // width: 1080px;
   margin: 0 auto;
   display: flex;
   align-items: center;
