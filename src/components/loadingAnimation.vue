@@ -14,6 +14,7 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
+
 .loading{
   padding: 30px;
   width: 100%;
