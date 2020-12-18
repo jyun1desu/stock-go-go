@@ -6,7 +6,7 @@
         <td class="names__title">期別<br />種類</td>
         <td
           v-for="data in companyData.year_balance_sheets"
-          :key="'column'+data.year"
+          :key="'column' + data.year"
           class="year"
         >
           {{ data.year }}<br />合併
@@ -19,17 +19,19 @@
       >
         <td
           v-for="item in setDataOrder(data)"
-          :key="item.key+item.value"
+          :key="item.key + item.value"
           :nowrap="item.key === 'name' ? 'nowrap' : 'wrap'"
           :class="{
             row_name: item.key === 'name',
             each_data: item.key !== 'name',
-            negative: item.value<0,
+            negative: item.value < 0,
             ident: item.key === 'name' ? needIdent(item.value) : false,
           }"
         >
           {{
-            item.key === "name" ? translateToMandarin(item.value) : numberFomat(item.value)
+            item.key === "name"
+              ? translateToMandarin(item.value)
+              : numberFomat(item.value)
           }}
         </td>
       </tr>
@@ -49,17 +51,21 @@ export default {
   },
   async mounted() {
     //columns_name
-    await fetch("https://5fbd1e2b3f8f90001638cc76.mockapi.io/layer")
-      .then((res) => res.json())
-      .then((rowTitles) => {
-        this.columns = rowTitles.filter(
-          (row) => row.table_name === "balance_sheets"
-        );
-      });
-    this.dataReady = true;
-    this.$emit("isReady");
+    this.getColumns();
   },
   methods: {
+    async getColumns() {
+      console.log(this.typeOfSheet)
+      await fetch("https://5fbd1e2b3f8f90001638cc76.mockapi.io/layer")
+        .then((res) => res.json())
+        .then((rowTitles) => {
+          this.columns = rowTitles.filter(
+            (row) => row.table_name === this.typeOfSheet
+          );
+        });
+      this.dataReady = true;
+      this.$emit("isReady");
+    },
     setDataOrder(data) {
       const orderedKey = Object.keys(data).reverse();
       const orderedArray = orderedKey.map((keyName) => {
@@ -129,6 +135,12 @@ export default {
       }
     },
   },
+  watch:{
+    typeOfSheet(){
+      this.dataReady = false;
+      this.getColumns()
+    }
+  }
 };
 </script>
 

@@ -56,11 +56,11 @@
                 v-show="showList === 'financialStatements'"
                 class="dropdown_toggler"
               >
-                <a @click="getYearReport" class="dropdown_item">資產負債表</a>
+                <a @click="getYearReport('balance_sheets')" class="dropdown_item">資產負債表</a>
                 <a @click="showNotYetDialog = true" class="dropdown_item"
                   >損益表</a
                 >
-                <a @click="showNotYetDialog = true" class="dropdown_item"
+                <a @click="getYearReport('cash_flow_statements')" class="dropdown_item"
                   >現金流量表</a
                 >
               </div>
@@ -155,7 +155,7 @@
           </div>
         </div>
         <YearTable
-          v-show="dataReady && typeOfSheet === 'balance_sheets'"
+          v-show="dataReady && yearSheets"
           class="data_list"
           @isReady="componentIsReady = true"
           :companyData="companyData"
@@ -193,7 +193,7 @@ export default {
       if (lastTimeSheetType) this.typeOfSheet = lastTimeSheetType;
     } else {
       //預設資料：資產負債表，預設公司：台積
-      await this.getYearReport();
+      await this.getYearReport('balance_sheets');
     }
   },
   data() {
@@ -429,7 +429,7 @@ export default {
     backToHome() {
       this.searchStockInfo("2330");
     },
-    getYearReport() {
+    getYearReport(type) {
       const same =
         this.nowStock === this.companyData.company_name ||
         this.nowStock === this.companyData.stock_symbol;
@@ -442,7 +442,7 @@ export default {
             this.dataReady = true;
           });
       }
-      this.typeOfSheet = "balance_sheets";
+      this.typeOfSheet = type;
       this.reportType = "year";
     },
     getPerShareRatio() {
@@ -465,7 +465,7 @@ export default {
             "https://5fbd1e2b3f8f90001638cc76.mockapi.io/reportYear2330";
           this.subDataAPI =
             "https://5fbd1e2b3f8f90001638cc76.mockapi.io/reportRatioYear2330";
-          this.getYearReport();
+          this.getYearReport('balance_sheets');
           break;
         case "3043":
         case "科風":
@@ -473,7 +473,7 @@ export default {
             "https://5fbf2d965923c90016e6ba2d.mockapi.io/reportYear3043";
           this.subDataAPI =
             "https://5fbf2d965923c90016e6ba2d.mockapi.io/reportRatioYear3043";
-          this.getYearReport();
+          this.getYearReport('balance_sheets');
           break;
         default:
           
@@ -512,11 +512,18 @@ export default {
         .mandarin;
     },
     unit() {
-      if (this.typeOfSheet === "balance_sheets") return "百萬元";
+      if (this.yearSheets) return "百萬元";
       if (this.typeOfSheet === "per_share_ratios") return "元、%";
       if (this.typeOfSheet === "workingCapital") return "X軸：年/Y軸：天";
       else return "";
     },
+    yearSheets(){
+      if(this.typeOfSheet === "balance_sheets" || this.typeOfSheet === "cash_flow_statements"){
+        return true
+      }else{
+        return false
+      }
+    }
   },
 
   watch: {
