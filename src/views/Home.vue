@@ -1,18 +1,11 @@
 <template>
   <div class="home">
-    <SubTable 
-    v-if="true"
-    :lookUpSheet="lookUpSheet" />
-    <YearTable 
-    v-if="true"
-    :lookUpSheet="lookUpSheet" />
+    hello
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import YearTable from "@/components/YearTable.vue";
-import SubTable from "@/components/subTable.vue";
 
 export default {
   name: "Home",
@@ -108,10 +101,6 @@ export default {
         },
       ],
     };
-  },
-  components: {
-    SubTable,
-    YearTable,
   },
 };
 </script>
