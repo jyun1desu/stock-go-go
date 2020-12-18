@@ -56,11 +56,11 @@
                 v-show="showList === 'financialStatements'"
                 class="dropdown_toggler"
               >
-                <a @click="getYearReport" class="dropdown_item">資產負債表</a>
+                <a @click="getYearReport('balance_sheets')" class="dropdown_item">資產負債表</a>
                 <a @click="showNotYetDialog = true" class="dropdown_item"
                   >損益表</a
                 >
-                <a @click="showNotYetDialog = true" class="dropdown_item"
+                <a @click="getYearReport('cash_flow_statements')" class="dropdown_item"
                   >現金流量表</a
                 >
               </div>
@@ -155,7 +155,7 @@
           </div>
         </div>
         <YearTable
-          v-show="dataReady && typeOfSheet === 'balance_sheets'"
+          v-show="dataReady && yearSheets"
           class="data_list"
           @isReady="componentIsReady = true"
           :companyData="companyData"
@@ -193,13 +193,122 @@ export default {
       if (lastTimeSheetType) this.typeOfSheet = lastTimeSheetType;
     } else {
       //預設資料：資產負債表，預設公司：台積
-      await this.getYearReport();
+      await this.getYearReport('balance_sheets');
     }
   },
   data() {
     return {
       componentIsReady: false,
       lookUpSheet: [
+        {
+          english: "earnings_before_interest_and_tax",
+          mandarin: "稅前息前淨利",
+        },
+        {
+          english: "EBIDTA",
+          mandarin: "稅前息前折舊前淨利－EBIDTA",
+        },
+        {
+          english: "EPS",
+          mandarin: "每股盈餘－完全稀釋－EPS",
+        },
+        {
+          english: "income_tax_expense",
+          mandarin: "所得稅費用",
+        },
+        {
+          english: "gains_and_losses_from_continuing_operations",
+          mandarin: "繼續營業單位損益",
+        },
+        {
+          english: "consolidated_net_income",
+          mandarin: "合併總損益",
+        },
+        {
+          english: "other_comprehensive_income_OCI",
+          mandarin: "其他綜合損益－OCI	",
+        },
+        {
+          english: "total_comprehensive_income",
+          mandarin: "本期綜合損益總額",
+        },
+        {
+          english: "net_operating_revenue",
+          mandarin: "營業收入淨額",
+        },
+        {
+          english: "cost_of_goods_sold",
+          mandarin: "營業成本",
+        },
+        {
+          english: "realized_gross_profit",
+          mandarin: "已實現銷貨毛利",
+        },
+        {
+          english: "operating_expenses",
+          mandarin: "營業費用",
+        },
+        {
+          english: "other_gains_and_losses",
+          mandarin: "其他收益及費損淨額",
+        },
+        {
+          english: "operating_income",
+          mandarin: "營業利益",
+        },
+        {
+          english: "total_non_operating_revenue_and_expense",
+          mandarin: "營業外收入及支出",
+        },
+        {
+          english: "income_before_tax",
+          mandarin: "稅前淨利",
+        },
+        {
+          english: "cash_dividends_paids_CFF",
+          mandarin: "支付現金股利-CFF",
+        },
+        {
+          english: "cash_flow_from_fundraising",
+          mandarin: "籌資活動之現金流量	(增加)減少-CFO",
+        },
+        {
+          english: "cash_flow_during_this_period",
+          mandarin: "本期產生現金流量	(增加)減少-CFO",
+        },
+        {
+          english: "decrease_increase_in_accounts_receivable_CFO",
+          mandarin: "應收帳款(增加)減少-CFO",
+        },
+        {
+          english: "decrease_increase_in_inventories_CFO",
+          mandarin: "存貨(增加)減少-CFO",
+        },
+        {
+          english: "increase_decrease_in_account_payable_CTO",
+          mandarin: "應付帳款增加(減少)-CTO",
+        },
+        {
+          english: "cash_flows_from_operations",
+          mandarin: "來自營運之現金流量",
+        },
+        {
+          english: "purchases_of_property_plant_equipment_include_prepaid_CFI",
+          mandarin: "購置不動產廠房設備(含預付)-CFI",
+        },
+        {
+          english: "disposals_of_property_plant_equipment_include_prepaid_CFI",
+          mandarin: "處分不動產廠房設備(含預付)-CFI",
+        },
+        {
+          english: "cash_flow_from_investment_activities",
+          mandarin: "投資活動之現金流量",
+        },
+        { english: "income_statements", mandarin: "綜合損益表" },
+        { english: "profit_before_tax_CFO", mandarin: "稅前淨利－CFO" },
+        { english: "depreciation_CFO", mandarin: "折舊－CFO" },
+        { english: "amortization_CFO", mandarin: "攤提－CFO	" },
+        { english: "cash_flow_statements", mandarin: "現金流量表" },
         { english: "workingCapital", mandarin: "營運資金週期" },
         { english: "per_share_ratios", mandarin: "每股比例表" },
         { english: "EBIDTA_per_share", mandarin: "每股EBIDTA" },
@@ -320,7 +429,7 @@ export default {
     backToHome() {
       this.searchStockInfo("2330");
     },
-    getYearReport() {
+    getYearReport(type) {
       const same =
         this.nowStock === this.companyData.company_name ||
         this.nowStock === this.companyData.stock_symbol;
@@ -333,7 +442,7 @@ export default {
             this.dataReady = true;
           });
       }
-      this.typeOfSheet = "balance_sheets";
+      this.typeOfSheet = type;
       this.reportType = "year";
     },
     getPerShareRatio() {
@@ -356,7 +465,7 @@ export default {
             "https://5fbd1e2b3f8f90001638cc76.mockapi.io/reportYear2330";
           this.subDataAPI =
             "https://5fbd1e2b3f8f90001638cc76.mockapi.io/reportRatioYear2330";
-          this.getYearReport();
+          this.getYearReport('balance_sheets');
           break;
         case "3043":
         case "科風":
@@ -364,10 +473,10 @@ export default {
             "https://5fbf2d965923c90016e6ba2d.mockapi.io/reportYear3043";
           this.subDataAPI =
             "https://5fbf2d965923c90016e6ba2d.mockapi.io/reportRatioYear3043";
-          this.getYearReport();
+          this.getYearReport('balance_sheets');
           break;
         default:
-          console.log("nono");
+          
           break;
       }
       this.stockName = "";
@@ -403,11 +512,18 @@ export default {
         .mandarin;
     },
     unit() {
-      if (this.typeOfSheet === "balance_sheets") return "百萬元";
+      if (this.yearSheets) return "百萬元";
       if (this.typeOfSheet === "per_share_ratios") return "元、%";
       if (this.typeOfSheet === "workingCapital") return "X軸：年/Y軸：天";
       else return "";
     },
+    yearSheets(){
+      if(this.typeOfSheet === "balance_sheets" || this.typeOfSheet === "cash_flow_statements"){
+        return true
+      }else{
+        return false
+      }
+    }
   },
 
   watch: {

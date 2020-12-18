@@ -1,87 +1,91 @@
 <template>
-  <table v-if="dataReady" class="table">
-    <!-- <div class="title">{{ tableTitle }}</div> -->
-    <div class="column_years">
-      <span class="names__title">期別<br />種類</span>
-      <span
-        v-for="data in companyData.year_balance_sheets"
-        :key="data.year"
-        class="year"
-        >{{ data.year }}<br />合併</span
-      >
-    </div>
-    <div class="data_table">
-      <div
-        v-for="data in rowNameWithData"
-        :key="data.column_name"
+  <div>
+    <table v-if="dataReady" class="table">
+      <!-- <caption class="title">{{ tableTitle }}</caption> -->
+      <tr class="column_years">
+        <td class="names__title">期別<br />種類</td>
+        <td
+          v-for="data in companyData.year_balance_sheets"
+          :key="'column' + data.year"
+          class="year"
+        >
+          {{ data.year }}<br />合併
+        </td>
+      </tr>
+      <tr
+        v-for="(data, index) in columnsWithData"
+        :key="'data' + index"
         class="data_row"
       >
-        <div
+        <td
+          v-for="item in setDataOrder(data)"
+          :key="item.key + item.value"
+          :nowrap="item.key === 'name' ? 'nowrap' : 'wrap'"
           :class="{
-            ident: data.order === 2,
+            row_name: item.key === 'name',
+            each_data: item.key !== 'name',
+            negative: item.value < 0,
+            ident: item.key === 'name' ? needIdent(item.value) : false,
           }"
-          class="row_name"
         >
-          {{ data.mandarin }}
-        </div>
-        <div
-          v-for="eachYear in data.eachYearData"
-          :key="eachYear.year"
-          class="each_data"
-          :class="{ negative: eachYear.value < 0 }"
-        >
-          {{ numberFomat(eachYear.value) }}
-        </div>
-      </div>
-    </div>
-  </table>
+          {{
+            item.key === "name"
+              ? translateToMandarin(item.value)
+              : numberFomat(item.value)
+          }}
+        </td>
+      </tr>
+    </table>
+  </div>
 </template>
 
 <script>
 export default {
   name: "Table",
-  props: ["lookUpSheet",'companyData','typeOfSheet'],
+  props: ["lookUpSheet", "companyData", "typeOfSheet"],
   data() {
     return {
-      companyAPI: "https://5fbf2d965923c90016e6ba2d.mockapi.io/reportYear3043", //應該要從父層prop過來
       columns: [],
       dataReady: false,
     };
   },
-  mounted() {
+  async mounted() {
     //columns_name
-    fetch("https://5fbd1e2b3f8f90001638cc76.mockapi.io/layer")
-      .then((res) => res.json())
-      .then((rowTitles) => {
-        this.columns = rowTitles.filter(
-          (row) => row.table_name === "balance_sheets"
-        );
-        this.dataReady=true;
-        this.$emit('isReady')
-      });
+    this.getColumns();
   },
   methods: {
-    translateToMandarin(lookUpSheet, data) {
-      const translated = data.map((item) => {
-        const mandarin = lookUpSheet.find(
-          (title) => title.english === item.column_name
-        ).mandarin;
-        const newItem = {
-          ...item,
-          mandarin: mandarin,
-        };
-        return newItem;
-      });
-      return translated;
+    async getColumns() {
+      console.log(this.typeOfSheet)
+      await fetch("https://5fbd1e2b3f8f90001638cc76.mockapi.io/layer")
+        .then((res) => res.json())
+        .then((rowTitles) => {
+          this.columns = rowTitles.filter(
+            (row) => row.table_name === this.typeOfSheet
+          );
+        });
+      this.dataReady = true;
+      this.$emit("isReady");
     },
-    getEachYearData(valueArray, columnName) {
-      const dataValue = valueArray.map((object) => {
+    setDataOrder(data) {
+      const orderedKey = Object.keys(data).reverse();
+      const orderedArray = orderedKey.map((keyName) => {
         return {
-          year: object.year,
-          value: object[`${columnName}`],
+          key: keyName,
+          value: data[keyName],
         };
       });
-      return dataValue;
+      return orderedArray;
+    },
+    translateToMandarin(englishName) {
+      const mandarin = this.lookUpSheet.find(
+        (item) => item.english === englishName
+      ).mandarin;
+      return mandarin;
+    },
+    getYearsData(dataArray, valueObject) {
+      dataArray.forEach((data) => {
+        valueObject[`${data.year}`] = data[`${valueObject.name}`];
+      });
     },
     addComma(number) {
       const reg = /(?=(?:\d{3})+(?:\.|$))/g;
@@ -94,23 +98,28 @@ export default {
         return this.addComma(number);
       }
     },
+    needIdent(columnName) {
+      const columnData = this.columns.find(
+        (column) => column["column_name"] === columnName
+      );
+      return columnData.order === 2;
+    },
   },
   computed: {
-    valueNameInMandarin() {
-      return this.translateToMandarin(this.lookUpSheet, this.columns);
+    sheetData() {
+      const sheetType = `year_${this.typeOfSheet}`;
+      return this.companyData[sheetType];
     },
-    rowNameWithData() {
-      if (this.dataReady) {
-        const withValue = this.valueNameInMandarin.map((data) => {
-          const eachYearData = this.getEachYearData(
-            this.companyData.year_balance_sheets,
-            data.column_name
-          );
-          return { ...data, eachYearData };
+    columnsWithData() {
+      if (this.sheetData) {
+        const resultArray = this.columns.map((item) => {
+          const obj = { name: item.column_name };
+          this.getYearsData(this.sheetData, obj);
+          return obj;
         });
-        return withValue;
+        return resultArray;
       } else {
-        return [];
+        return {};
       }
     },
     tableTitle() {
@@ -126,11 +135,17 @@ export default {
       }
     },
   },
+  watch:{
+    typeOfSheet(){
+      this.dataReady = false;
+      this.getColumns()
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-.table{
-  @include table_style; 
+.table {
+  @include table_style;
 }
 </style>

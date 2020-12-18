@@ -1,5 +1,8 @@
 @mixin table_style {
   width: 100%;
+  text-align: right;
+  font-size: 14px;
+  border-collapse: collapse;
 
   &>.title {
     background-color: #333333;
@@ -9,58 +12,47 @@
   }
 
   .column_years {
-    display: flex;
     background-color: $rows_name_block_color;
-    align-items: center;
 
     .names__title {
-      flex: 0 0 22%;
       text-align: left;
       margin-left: 10px;
       padding: $block_padding;
       box-sizing: border-box;
+      padding-left: 5px;
     }
 
     .year {
-      flex: 0 1 10%;
       padding: $block_padding;
       text-align: right;
     }
   }
 
-  .data_table {
-    display: flex;
-    flex-direction: column;
+  .data_row {
+    border-top: 1px solid $border_color;
 
-    .data_row {
-      display: flex;
-      align-items: center;
-      border-top: 1px solid $border_color;
+    &:nth-child(2n-1) {
+      background-color: $column_block_grey;
+    }
 
-      &:nth-child(2n-1) {
-        background-color: $column_block_grey;
+    .row_name {
+      text-align: left;
+      padding: $block_padding;
+      padding-left: 5px;
+      box-sizing: border-box;
+
+      &.ident {
+        padding-left: $ident_px;
       }
+    }
 
-      .row_name {
-        flex: 0 0 22%;
-        text-align: left;
-        margin-left: 10px;
-        padding: $block_padding;
-        box-sizing: border-box;
+    .each_data {
+      // flex: 0 1 10%;
+      padding: $block_padding;
+      text-align: right;
 
-        &.ident {
-          padding-left: $ident_px;
-        }
-      }
-
-      .each_data {
-        flex: 0 1 10%;
-        padding: $block_padding;
-        text-align: right;
-
-        &.negative{
-          color:#c02020;
-        }
+      &.negative {
+        color: #c02020;
       }
     }
   }
