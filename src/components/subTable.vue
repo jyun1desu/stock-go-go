@@ -3,34 +3,32 @@
     <!-- <div class="title">1039台積電_每股比例表_年 單位：元、%</div> -->
     <tr class="column_years">
       <td class="names__title">期別<br />種類</td>
-      <td
-        v-for="data in thisTableData"
-        :key="'year' + data.year"
-        class="year"
-      >
-        {{ data.year }}<br />合併</td
-      >
+      <td v-for="data in thisTableData" :key="'year' + data.year" class="year">
+        {{ data.year }}<br />合併
+      </td>
     </tr>
     <!-- <div class="data_table"> -->
-      <tr v-for="data in rowsNameWithValue" :key="data.name" class="data_row">
-        <td
-          :class="{
-            ident: data.order === 2,
-          }"
-          class="row_name"
-        >
-          {{ data.mandarin
-          }}{{ data.mandarin.includes("比例") ? "(%)" : "(元)" }}
-        </td>
-        <td
-          v-for="eachYear in data.value"
-          :key="eachYear.year"
-          class="each_data"
-          :class="{ negative: eachYear.value < 0 }"
-        >
-          {{ trunIntoPercentage(eachYear.value, data) }}
-        </td>
-      </tr>
+    <tr
+      v-for="(data, index) in columnsWithData"
+      :key="'subdata' + index"
+      class="data_row"
+    >
+      <td
+        v-for="item in setDataOrder(data)"
+        :key="item.key"
+        :class="{
+          row_name: item.key === 'name',
+          each_data: item.key !== 'name',
+          negative: item.value<0
+        }"
+      >
+        {{
+          item.key === "name"
+            ? `${translateToMandarin(item.value)}${translateToMandarin(item.value).includes("比例") ? '(%)' : '(元)'}`
+            : trunIntoPercentage(item.value, data)
+        }}
+      </td>
+    </tr>
     <!-- </div> -->
   </table>
 </template>
@@ -63,6 +61,22 @@ export default {
           this.dataReady = true;
         });
     },
+    translateToMandarin(englishName) {
+      const mandarin = this.lookUpSheet.find(
+        (item) => item.english === englishName
+      ).mandarin;
+      return mandarin;
+    },
+    setDataOrder(data) {
+      const orderedKey = Object.keys(data).reverse();
+      const orderedArray = orderedKey.map((keyName) => {
+        return {
+          key: keyName,
+          value: data[keyName],
+        };
+      });
+      return orderedArray;
+    },
     getEachYearData(valueArray, columnName) {
       const dataValue = valueArray.map((object) => {
         return {
@@ -82,10 +96,23 @@ export default {
           : parseFloat(number.toFixed(1));
       }
     },
+    getYearsData(dataArray, valueObject) {
+      dataArray.forEach((data) => {
+        valueObject[`${data.year}`] = data[`${valueObject.name}`];
+      });
+    },
   },
   computed: {
     thisTableData() {
       return this.companyData[this.typeOfSheet];
+    },
+    columnsWithData() {
+      const resultArray = this.rowsName.map((name) => {
+        const obj = { name: name };
+        this.getYearsData(this.thisTableData, obj);
+        return obj;
+      });
+      return resultArray;
     },
     rowsName() {
       const rows = Object.keys(this.thisTableData[0]);

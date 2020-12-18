@@ -24,11 +24,12 @@
           :class="{
             row_name: item.key === 'name',
             each_data: item.key !== 'name',
+            negative: item.value<0,
             ident: item.key === 'name' ? needIdent(item.value) : false,
           }"
         >
           {{
-            item.key === "name" ? translateToMandarin(item.value) : item.value
+            item.key === "name" ? translateToMandarin(item.value) : numberFomat(item.value)
           }}
         </td>
       </tr>

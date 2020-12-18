@@ -476,7 +476,7 @@ export default {
           this.getYearReport();
           break;
         default:
-          console.log("nono");
+          
           break;
       }
       this.stockName = "";
