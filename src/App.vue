@@ -159,7 +159,9 @@
             >
           </div>
         </div>
-        <router-view class="table_block"/>
+        <router-view 
+        :height="250"
+        class="table_block"/>
       </section>
     </main>
     <footer>
