@@ -1,19 +1,74 @@
-<template>
-  <div class="line_chart">
-    <img src="@/assets/2330___________________.png" alt="" />
-  </div>
-</template>
-
 <script>
-export default {};
+import { Line } from "vue-chartjs";
+export default {
+  extends: Line,
+  data() {
+    return {
+      chartdata: {
+        labels: [],
+        datasets: [],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+      },
+    };
+  },
+  methods: {
+    getChartDataset(data) {
+      const keys = Object.keys(data[0]);
+      const yearIndex = keys.findIndex((keyName) => keyName === "year");
+      keys.splice(yearIndex, 1);
+      let max = 255;
+      let finalData = keys.map((item) => {
+        return {
+          label: this.translateToMandarin(item),
+          data: this.getData(data, item),
+          backgroundColor: "rgba(255, 255, 255, 0)",
+          borderColor: this.setBgColor(max),
+          lineTension: 0,
+        };
+      });
+      return {
+        labels: this.getData(this.rawData, "year"),
+        datasets: finalData,
+      };
+    },
+    getData(data, keyName) {
+      let array = data.map((item) => {
+        return item[keyName];
+      });
+      return array;
+    },
+    setBgColor(max) {
+      let first = Math.floor(Math.random() * Math.floor(max));
+      let second = Math.floor(Math.random() * Math.floor(max));
+      let third = Math.floor(Math.random() * Math.floor(max));
+      return `rgba(${first}, ${second}, ${third}, 1)`;
+    },
+    translateToMandarin(name) {
+      return this.lookUpSheet.find((item) => item.english === name).mandarin;
+    },
+  },
+  computed: {
+    rawData() {
+      return this.$store.state.subData["year_operating_performances"];
+    },
+    lookUpSheet() {
+      return this.$store.state.lookUpSheet;
+    },
+  },
+  watch: {
+    rawData(value) {
+      this.chartdata = this.getChartDataset(value);
+      this.renderChart(this.chartdata, this.options);
+    },
+  },
+};
 </script>
-
-<style lang="scss" scoped>
-.line_chart {
+<style lang="scss">
+.small {
   width: 100%;
-  text-align: center;
-  img {
-    width: 80%;
-  }
+  height: 20px;
 }
 </style>

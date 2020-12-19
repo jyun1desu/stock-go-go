@@ -126,7 +126,7 @@
       </div>
     </header>
     <Loading v-if="!dataReady" />
-    <main v-show="dataReady||this.company" :class="{ scrollup_top: stickTheBar }">
+    <main v-show="dataReady" :class="{ scrollup_top: stickTheBar }">
       <section :class="{ scrollup_top: stickTheBar }" class="title">
         <div class="title_content">
           <!--scrollup-->
@@ -159,13 +159,7 @@
             >
           </div>
         </div>
-        <router-view :key="$route.fullPath" />
-        <!-- <SubTable
-          @isReady="componentIsReady = true"
-          v-show="typeOfSheet === 'per_share_ratios'"
-          :dataAPI="subDataAPI"
-        /> -->
-        <!-- <LineChart v-show="typeOfSheet === 'workingCapital'" /> -->
+        <router-view class="table_block"/>
       </section>
     </main>
     <footer>
@@ -562,6 +556,11 @@ main {
   }
   .report_unit span {
     line-height: 2;
+  }
+
+  .table_block{
+    width: 100%;
+    overflow: scroll;
   }
 }
 footer {

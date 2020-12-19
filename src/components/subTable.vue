@@ -42,28 +42,9 @@ export default {
   data() {
     return {
       typeOfSheet: "year_per_share_ratios",
-      companyData: [],
-      dataReady: false,
     };
   },
-  mounted() {
-    this.getAPIdata(this.dataAPI);
-  },
-  watch: {
-    dataAPI(value) {
-      this.getAPIdata(value);
-    },
-  },
   methods: {
-    getAPIdata(api) {
-      this.dataReady = false;
-      fetch(api)
-        .then((res) => res.json())
-        .then((datas) => {
-          this.companyData = datas;
-          this.dataReady = true;
-        });
-    },
     translateToMandarin(englishName) {
       const mandarin = this.lookUpSheet.find(
         (item) => item.english === englishName
@@ -79,15 +60,6 @@ export default {
         };
       });
       return orderedArray;
-    },
-    getEachYearData(valueArray, columnName) {
-      const dataValue = valueArray.map((object) => {
-        return {
-          year: object.year,
-          value: object[`${columnName}`],
-        };
-      });
-      return dataValue;
     },
     trunIntoPercentage(number, dataType) {
       if (dataType.name != "EBIDTA_per_share") {
@@ -106,6 +78,12 @@ export default {
     },
   },
   computed: {
+    dataReady(){
+      return this.$store.state.dataReady
+    },
+    subData(){
+      return this.$store.state.subData
+    },
     dataAPI(){
       return this.$store.state.subDataAPI;
     },
@@ -113,7 +91,7 @@ export default {
       return this.$store.state.lookUpSheet;
     },
     thisTableData() {
-      return this.companyData[this.typeOfSheet];
+      return this.subData[this.typeOfSheet];
     },
     columnsWithData() {
       const resultArray = this.rowsName.map((name) => {
@@ -128,16 +106,6 @@ export default {
       const deleteIndex = rows.indexOf("year");
       rows.splice(deleteIndex, 1);
       return rows;
-    },
-    rowsNameWithValue() {
-      const withValue = this.rowsName.map((data) => {
-        return {
-          name: data,
-          mandarin: this.lookUpSheet.find((d) => d.english === data).mandarin,
-          value: this.getEachYearData(this.thisTableData, data),
-        };
-      });
-      return withValue;
     },
   },
 };

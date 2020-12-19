@@ -14,6 +14,26 @@ export default new Vuex.Store({
         mandarin: "稅前息前折舊前淨利－EBIDTA",
       },
       {
+        english: "days_of_sales",
+        mandarin: "銷貨天數",
+      },
+      {
+        english: "days_of_cash_receivable",
+        mandarin: "應收帳款收現天數",
+      },
+      {
+        english: "days_of_accounts_payable_turnover",
+        mandarin: "應付帳款週轉天數",
+      },
+      {
+        english: "days_of_operation_turnover",
+        mandarin: "營運週轉天數",
+      },
+      {
+        english: "days_of_cash_turnover",
+        mandarin: "現金週轉天數",
+      },
+      {
         english: "EPS",
         mandarin: "每股盈餘－完全稀釋－EPS",
       },
@@ -319,10 +339,12 @@ export default new Vuex.Store({
       },
     ],
     companyData: [],
+    subData:[],
     companyAPI: 'https://5fbd1e2b3f8f90001638cc76.mockapi.io/reportYear2330',
     subDataAPI: "https://5fbd1e2b3f8f90001638cc76.mockapi.io/reportRatioYear2330",
     typeOfSheet: 'balance_sheets',
     dataReady: false,
+    nowCompany:2330,
 
   },
   mutations: {
@@ -335,11 +357,17 @@ export default new Vuex.Store({
     setCompanyData(state, data) {
       state.companyData = data
     },
+    setSubData(state,data){
+      state.subData = data
+    },
     setDataStatus(state, status) {
       state.dataReady = status
     },
     switchDataType(state, type) {
       state.typeOfSheet = type
+    },
+    setNowCompany(state,companyID){
+      state.nowCompany = companyID
     }
   },
   actions: {
@@ -363,6 +391,11 @@ export default new Vuex.Store({
         .then((res) => res.json())
         .then((datas) => {
           commit('setCompanyData', datas)
+        });
+      fetch(state.subDataAPI)
+        .then((res) => res.json())
+        .then((datas) => {
+          commit('setSubData', datas)
           commit('setDataStatus', true);
         });
 

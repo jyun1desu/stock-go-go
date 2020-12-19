@@ -32,18 +32,28 @@ const routes = [{
   {
     path: '/:companyID/sub/:type',
     name: 'subTable',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import( /* webpackChunkName: "about" */ '../components/subTable.vue')
+    component: () => import( /* webpackChunkName: "about" */ '../components/subTable.vue'),
+    async beforeEnter(to, from, next) {
+      store.commit('switchDataType', to.params.type);
+      await store.commit('setDataStatus', false);
+      await store.dispatch('setCompanyData', {
+        companyID: to.params.companyID
+      });
+      next();
+    }
   },
   {
-    path: '/:companyID/:type',
+    path: '/:companyID/chart/:type',
     name: 'chart',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import( /* webpackChunkName: "about" */ '../components/lineChart.vue')
+    component: () => import( /* webpackChunkName: "about" */ '../components/lineChart.vue'),
+    async beforeEnter(to, from, next) {
+      store.commit('switchDataType', to.params.type);
+      await store.commit('setDataStatus', false);
+      await store.dispatch('setCompanyData', {
+        companyID: to.params.companyID
+      });
+      next();
+    }
   }
 ]
 

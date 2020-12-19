@@ -48,13 +48,13 @@ export default {
       dataReady: false,
     };
   },
-  async mounted() {
+  mounted() {
     //columns_name
     this.getColumns();
   },
   methods: {
-    async getColumns() {
-      await fetch("https://5fbd1e2b3f8f90001638cc76.mockapi.io/layer")
+    getColumns() {
+      fetch("https://5fbd1e2b3f8f90001638cc76.mockapi.io/layer")
         .then((res) => res.json())
         .then((rowTitles) => {
           this.columns = rowTitles.filter(
@@ -104,11 +104,11 @@ export default {
     },
   },
   computed: {
-    lookUpSheet(){
-      return this.$store.state.lookUpSheet
+    lookUpSheet() {
+      return this.$store.state.lookUpSheet;
     },
-    companyData(){
-      return this.$store.state.companyData
+    companyData() {
+      return this.$store.state.companyData;
     },
     sheetData() {
       const sheetType = `year_${this.typeOfSheet}`;
@@ -138,28 +138,27 @@ export default {
         return "";
       }
     },
-    typeOfSheet(){
-      return this.$store.state.typeOfSheet
+    typeOfSheet() {
+      return this.$store.state.typeOfSheet;
     },
-    a(){
+    a() {
       return this.$store.state.dataReady;
-    }
+    },
   },
-  watch:{
-    typeOfSheet(){
+  watch: {
+    typeOfSheet() {
       this.dataReady = false;
-      this.getColumns()
-    }
+      this.getColumns();
+    },
   },
-  async beforeRouteUpdate(to,from,next){
-
-      this.$store.commit('switchDataType', to.params.type);
-      await this.$store.commit('setDataStatus', false);
-      await this.$store.dispatch('setCompanyData', {
-        companyID: to.params.companyID
-      });
+  async beforeRouteUpdate(to, from, next) {
+    this.$store.commit("switchDataType", to.params.type);
+    await this.$store.commit("setDataStatus", false);
+    await this.$store.dispatch("setCompanyData", {
+      companyID: to.params.companyID,
+    });
     next();
-  }
+  },
 };
 </script>
 
