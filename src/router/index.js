@@ -12,7 +12,9 @@ const routes = [{
     component: () => import( /* webpackChunkName: "about" */ '../components/YearTable.vue'),
     async beforeEnter(to, from, next) {
       store.commit("switchDataType", "balance_sheets");
-      store.dispatch('setCompanyData', 2330);
+      store.dispatch('setCompanyData', {
+        companyID: '2330'
+      });
       next();
     }
   },

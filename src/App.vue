@@ -125,18 +125,15 @@
         </nav>
       </div>
     </header>
-    <Loading v-if="!dataReady" />
-    <main v-show="dataReady" :class="{ scrollup_top: stickTheBar }">
+    <main :class="{ scrollup_top: stickTheBar }">
       <section :class="{ scrollup_top: stickTheBar }" class="title">
-        <div class="title_content">
-          <!--scrollup-->
+        <div :class="{ not_ready: !dataReady }" class="title_content">
           <p class="title_text">{{ stockIDandName }}</p>
-          <!--scrollup_text-->
           <p class="title_text">{{ sheetNameInMandarin }}</p>
-          <!--scrollup_text-->
         </div>
       </section>
-      <section class="data">
+      <Loading v-if="!dataReady" />
+      <section v-show="dataReady" class="data">
         <div class="report_data">
           <div class="report_unit">
             <span>單位：{{ unit }}</span>
@@ -159,12 +156,10 @@
             >
           </div>
         </div>
-        <router-view 
-        :height="250"
-        class="table_block"/>
+        <router-view :height="250" class="table_block" />
       </section>
     </main>
-    <footer>
+    <footer v-show="dataReady">
       <a href="#" class="back">BACK TO TOP</a>
     </footer>
   </div>
@@ -203,7 +198,9 @@ export default {
       }
     },
     backToHome() {
-      this.getYearReport("balance_sheets", "2330");
+      this.$router.push({
+        name: "Default",
+      });
     },
     getYearReport(type, companyNumber = this.companyID) {
       this.$store.commit("switchDataType", type);
@@ -517,6 +514,18 @@ main {
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
+
+  .title_text {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 200;
+    letter-spacing: 1px;
+  }
+  &.not_ready {
+    .title_text {
+      color: $main_theme_color;
+    }
+  }
 }
 .title_text {
   margin: 0;
@@ -560,7 +569,7 @@ main {
     line-height: 2;
   }
 
-  .table_block{
+  .table_block {
     width: 100%;
     overflow: scroll;
   }
