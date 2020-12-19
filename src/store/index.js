@@ -344,7 +344,7 @@ export default new Vuex.Store({
     subDataAPI: "https://5fbd1e2b3f8f90001638cc76.mockapi.io/reportRatioYear2330",
     typeOfSheet: 'balance_sheets',
     dataReady: false,
-    nowCompany:2330,
+    nowCompany:'',
 
   },
   mutations: {
@@ -378,7 +378,6 @@ export default new Vuex.Store({
       companyID
     }) {
       if (companyID === '2330') {
-
         commit('setCompanyAPI', 'https://5fbd1e2b3f8f90001638cc76.mockapi.io/reportYear2330');
         commit('setSubAPI', 'https://5fbd1e2b3f8f90001638cc76.mockapi.io/reportRatioYear2330');
       }
@@ -386,7 +385,8 @@ export default new Vuex.Store({
         commit('setCompanyAPI', 'https://5fbf2d965923c90016e6ba2d.mockapi.io/reportYear3043');
         commit('setSubAPI', 'https://5fbf2d965923c90016e6ba2d.mockapi.io/reportRatioYear3043');
       }
-
+      commit('setNowCompany',companyID)
+      console.log(state.nowCompany)
       fetch(state.companyAPI)
         .then((res) => res.json())
         .then((datas) => {
