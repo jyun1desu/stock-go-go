@@ -39,34 +39,7 @@
 <script>
 export default {
   name: "Table",
-  data() {
-    return {
-      columns: [],
-      thisSheetColums: [],
-    };
-  },
-  created() {
-    //columns_name
-    if (!this.columns.length) {
-      this.getAllColumns();
-    }
-  },
   methods: {
-    async getAllColumns() {
-      await this.$store.commit("setDataStatus", false);
-      await fetch("https://5fbd1e2b3f8f90001638cc76.mockapi.io/layer")
-        .then((res) => res.json())
-        .then((rowTitles) => {
-          this.columns = rowTitles;
-          this.getNowColumns();
-        });
-      this.$store.commit("setDataStatus", true);
-    },
-    getNowColumns() {
-      this.thisSheetColums = this.columns.filter(
-        (row) => row.table_name === this.typeOfSheet
-      );
-    },
     setDataOrder(data) {
       const orderedKey = Object.keys(data).reverse();
       const orderedArray = orderedKey.map((keyName) => {
@@ -107,6 +80,9 @@ export default {
     },
   },
   computed: {
+    thisSheetColums(){
+      return this.$store.getters.nowYearColumns;
+    },
     lookUpSheet() {
       return this.$store.state.lookUpSheet;
     },
@@ -146,13 +122,6 @@ export default {
     },
     dataReady() {
       return this.$store.state.dataReady;
-    },
-  },
-  watch: {
-    typeOfSheet(value) {
-      this.thisSheetColums = this.columns.filter(
-        (row) => row.table_name === value
-      );
     },
   },
   async beforeRouteUpdate(to, from, next) {

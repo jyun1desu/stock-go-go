@@ -12,7 +12,7 @@ const routes = [{
     component: () => import( /* webpackChunkName: "about" */ '../components/YearTable.vue'),
     async beforeEnter(to, from, next) {
       store.commit("switchDataType", "balance_sheets");
-      store.dispatch('setCompanyData', {
+      await store.dispatch('setCompanyData', {
         companyID: '2330'
       });
       next();
@@ -41,7 +41,6 @@ const routes = [{
       await store.dispatch('setCompanyData', {
         companyID: to.params.companyID
       });
-      store.commit('setDataStatus', true);
       next();
     }
   },
@@ -55,7 +54,6 @@ const routes = [{
       await store.dispatch('setCompanyData', {
         companyID: to.params.companyID
       });
-      store.commit('setDataStatus', true);
       next();
     }
   }
