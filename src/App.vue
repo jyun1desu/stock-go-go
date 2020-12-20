@@ -191,7 +191,7 @@ export default {
   methods: {
     handleScroll() {
       const offsetTop = this.$refs.header.clientHeight;
-      if (window.scrollY > offsetTop / 2) {
+      if (window.scrollY > offsetTop) {
         this.stickTheBar = true;
       } else {
         this.stickTheBar = false;
