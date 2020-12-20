@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <header ref="header">
-      <div class="container">
+    <header :class="{ scrollup_top: stickTheBar }">
+      <div class="container" ref="header">
         <a @click="backToHome" class="logo" href="#">
           <img src="@/assets/logo.jpg" alt="brand logo" />
         </a>
@@ -124,14 +124,14 @@
           </div>
         </nav>
       </div>
-    </header>
-    <main :class="{ scrollup_top: stickTheBar }">
-      <section :class="{ scrollup_top: stickTheBar }" class="title">
+      <section class="title">
         <div :class="{ not_ready: !dataReady }" class="title_content">
           <p class="title_text">{{ stockIDandName }}</p>
           <p class="title_text">{{ sheetNameInMandarin }}</p>
         </div>
       </section>
+    </header>
+    <main :class="{ scrollup_top: stickTheBar }">
       <Loading v-if="!dataReady" />
       <section v-show="dataReady" class="data">
         <div class="report_data">
@@ -191,7 +191,7 @@ export default {
   methods: {
     handleScroll() {
       const offsetTop = this.$refs.header.clientHeight;
-      if (window.scrollY > offsetTop) {
+      if (window.scrollY > offsetTop / 2) {
         this.stickTheBar = true;
       } else {
         this.stickTheBar = false;
@@ -342,162 +342,42 @@ a {
   text-decoration: none;
   color: #000;
 }
+
 header {
-  padding: 20px 0;
-}
-.container {
-  width: 1080px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-}
-.logo img {
-  cursor: pointer;
-  width: 100px;
-}
-
-.searchbar {
-  margin-left: 20px;
-  flex: 0 0 30%; // jyunyi
-  position: relative;
-
-  .search_area {
-    position: relative;
-  }
-  .search_text {
-    padding: 10px;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px;
-    border-radius: 2px;
-    border: 1px solid #333;
-    font-size: 18px;
-    letter-spacing: 2px;
-
-    &:focus {
-      outline: none;
-      border: 2px solid $main_theme_color;
-    }
-    &::placeholder {
-      letter-spacing: 1px;
-      font-size: 16px;
-    }
-  }
-  .search_submit {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    border: none;
-    background-color: transparent;
-    &:focus {
-      outline: none;
-    }
-    i {
-      font-size: 18px;
-      &:hover {
-        color: $main_theme_color;
-      }
-    }
-  }
-  .result_list {
-    position: absolute;
-    width: 100%;
-    background-color: rgba(255, 255, 255, 0.95);
-    margin-top: 5px;
-    padding: 2px;
-    box-sizing: border-box;
-    .each_result {
-      cursor: pointer;
-      display: block;
-      padding: 10px;
-      box-sizing: border-box;
-      &:hover {
-        background-color: #f3f3f3;
-      }
-    }
-  }
-}
-
-.navbar {
-  display: flex;
-  margin-left: auto;
-}
-.menu {
-  flex-grow: 1;
-  display: flex;
-
-  .menu_list {
-    position: relative;
-    &.now_picked {
-      .dropdown_menu {
-        color: $highlight_font;
-      }
-    }
-    a {
-      cursor: pointer;
-    }
-  }
-  .dropdown_menu {
-    padding: 10px;
-    display: block;
-    font-size: 18px;
-    letter-spacing: 2px;
-    font-weight: 400;
-    position: relative;
-
-    .toggle_icon {
-      margin-right: 5px;
-      font-size: 20px;
-      transform: rotate(-90deg);
-      transition: 0.5s all;
-
-      &.open_list {
-        transform: rotate(0);
-        color: $highlight_font;
-      }
-    }
-  }
-  .dropdown_toggler {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    background-color: #fff;
-    position: absolute;
-    width: 120%;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 1px 1px 2px 0px rgb(223, 223, 223);
-  }
-
-  .dropdown_item {
-    line-height: 2;
-    margin-left: 10px;
-    font-size: 16px;
-    letter-spacing: 2px;
-    & + .dropdown_item {
-      margin-top: 10px;
-    }
-    &:hover {
-      color: $highlight_font;
-    }
-  }
-}
-
-main {
-  overflow: auto;
-  &.scrollup_top {
-    padding-top: 80px;
-  }
-}
-
-.title {
-  background-color: $main_theme_color;
+  background-color: #fff;
   &.scrollup_top {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
+    .container {
+      padding: 5px 0;
+      .logo {
+        img {
+          width: 70px;
+        }
+      }
+      .menu {
+        .dropdown_menu,
+        .dropdown_item {
+          font-size: 16px;
+        }
+      }
+      .searchbar {
+        .search_text {
+          padding: 5px;
+          font-size: 14px;
+          &::placeholder {
+            font-size: 14px;
+          }
+        }
+        .search_submit {
+          i {
+            font-size: 15px;
+          }
+        }
+      }
+    }
     .title_content {
       padding: 10px;
     }
@@ -505,6 +385,157 @@ main {
       font-size: 20px;
     }
   }
+  .container {
+    width: 1080px;
+    padding: 20px 0;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    transition: all 0.5s;
+    .logo img {
+      cursor: pointer;
+      width: 100px;
+    }
+
+    .searchbar {
+      margin-left: 20px;
+      flex: 0 0 30%; // jyunyi
+      position: relative;
+
+      .search_area {
+        position: relative;
+      }
+      .search_text {
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px;
+        border-radius: 2px;
+        border: 1px solid #333;
+        font-size: 18px;
+        letter-spacing: 2px;
+
+        &:focus {
+          outline: none;
+          border: 2px solid $main_theme_color;
+        }
+        &::placeholder {
+          letter-spacing: 1px;
+          font-size: 16px;
+        }
+      }
+      .search_submit {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        border: none;
+        background-color: transparent;
+        &:focus {
+          outline: none;
+        }
+        i {
+          font-size: 18px;
+          &:hover {
+            color: $main_theme_color;
+          }
+        }
+      }
+      .result_list {
+        position: absolute;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.95);
+        margin-top: 5px;
+        padding: 2px;
+        box-sizing: border-box;
+        .each_result {
+          cursor: pointer;
+          display: block;
+          padding: 10px;
+          box-sizing: border-box;
+          &:hover {
+            background-color: #f3f3f3;
+          }
+        }
+      }
+    }
+
+    .navbar {
+      display: flex;
+      margin-left: auto;
+    }
+    .menu {
+      flex-grow: 1;
+      display: flex;
+
+      .menu_list {
+        position: relative;
+        &.now_picked {
+          .dropdown_menu {
+            color: $highlight_font;
+          }
+        }
+        a {
+          cursor: pointer;
+        }
+      }
+      .dropdown_menu {
+        padding: 10px;
+        display: block;
+        font-size: 18px;
+        letter-spacing: 2px;
+        font-weight: 400;
+        position: relative;
+
+        .toggle_icon {
+          margin-right: 5px;
+          font-size: 20px;
+          transform: rotate(-90deg);
+          transition: 0.5s all;
+
+          &.open_list {
+            transform: rotate(0);
+            color: $highlight_font;
+          }
+        }
+      }
+      .dropdown_toggler {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        background-color: #fff;
+        position: absolute;
+        width: 120%;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 1px 1px 2px 0px rgb(223, 223, 223);
+      }
+
+      .dropdown_item {
+        line-height: 2;
+        margin-left: 10px;
+        font-size: 16px;
+        letter-spacing: 2px;
+        & + .dropdown_item {
+          margin-top: 10px;
+        }
+        &:hover {
+          color: $highlight_font;
+        }
+      }
+    }
+  }
+}
+
+main {
+  overflow: auto;
+  &.scrollup_top {
+    padding-top: 150px;
+  }
+}
+
+.title {
+  background-color: $main_theme_color;
 }
 .title_content {
   margin: 0 auto;
