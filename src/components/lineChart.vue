@@ -14,6 +14,11 @@ export default {
       },
     };
   },
+  mounted() {
+    if (this.rawData) {
+      this.renderLineChart();
+    }
+  },
   methods: {
     getChartDataset(data) {
       const keys = Object.keys(data[0]);
@@ -49,6 +54,10 @@ export default {
     translateToMandarin(name) {
       return this.lookUpSheet.find((item) => item.english === name).mandarin;
     },
+    renderLineChart() {
+      this.chartdata = this.getChartDataset(this.rawData);
+      this.renderChart(this.chartdata, this.options);
+    },
   },
   computed: {
     rawData() {
@@ -59,9 +68,8 @@ export default {
     },
   },
   watch: {
-    rawData(value) {
-      this.chartdata = this.getChartDataset(value);
-      this.renderChart(this.chartdata, this.options);
+    rawData() {
+      this.renderLineChart();
     },
   },
 };

@@ -338,14 +338,22 @@ export default new Vuex.Store({
         mandarin: "投資資本總額－IC",
       },
     ],
+    allColumns: [],
     companyData: [],
-    subData:[],
-    companyAPI: 'https://5fbd1e2b3f8f90001638cc76.mockapi.io/reportYear2330',
-    subDataAPI: "https://5fbd1e2b3f8f90001638cc76.mockapi.io/reportRatioYear2330",
+    subData: [],
+    companyAPI: '',
+    subDataAPI: "",
     typeOfSheet: 'balance_sheets',
     dataReady: false,
-    nowCompany:'',
+    nowCompany: '',
 
+  },
+  getters: {
+    nowYearColumns: state => {
+      return state.allColumns.filter(
+        (row) => row.table_name === state.typeOfSheet
+      );
+    }
   },
   mutations: {
     setCompanyAPI(state, API) {
@@ -357,7 +365,7 @@ export default new Vuex.Store({
     setCompanyData(state, data) {
       state.companyData = data
     },
-    setSubData(state,data){
+    setSubData(state, data) {
       state.subData = data
     },
     setDataStatus(state, status) {
@@ -366,17 +374,25 @@ export default new Vuex.Store({
     switchDataType(state, type) {
       state.typeOfSheet = type
     },
-    setNowCompany(state,companyID){
+    setNowCompany(state, companyID) {
       state.nowCompany = companyID
+    },
+    setAllColumns(state, columns) {
+      state.allColumns = columns
     }
   },
   actions: {
     setCompanyData({
       commit,
-      state
+      state,
+      dispatch
     }, {
       companyID
     }) {
+      if (state.nowCompany === companyID) {
+        commit('setNowCompany', companyID)
+        return commit('setDataStatus', true)
+      }
       if (companyID === '2330') {
         commit('setCompanyAPI', 'https://5fbd1e2b3f8f90001638cc76.mockapi.io/reportYear2330');
         commit('setSubAPI', 'https://5fbd1e2b3f8f90001638cc76.mockapi.io/reportRatioYear2330');
@@ -385,8 +401,8 @@ export default new Vuex.Store({
         commit('setCompanyAPI', 'https://5fbf2d965923c90016e6ba2d.mockapi.io/reportYear3043');
         commit('setSubAPI', 'https://5fbf2d965923c90016e6ba2d.mockapi.io/reportRatioYear3043');
       }
-      commit('setNowCompany',companyID)
-      console.log(state.nowCompany)
+      commit('setNowCompany', companyID);
+      dispatch('getAllColumns');
       fetch(state.companyAPI)
         .then((res) => res.json())
         .then((datas) => {
@@ -398,9 +414,16 @@ export default new Vuex.Store({
           commit('setSubData', datas)
           commit('setDataStatus', true);
         });
-
+    },
+    getAllColumns({
+      commit
+    }) {
+      fetch("https://5fbd1e2b3f8f90001638cc76.mockapi.io/layer")
+        .then((res) => res.json())
+        .then((rowTitles) => {
+          commit('setAllColumns', rowTitles)
+        });
     }
-
   },
   modules: {}
 })

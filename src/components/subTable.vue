@@ -102,10 +102,14 @@ export default {
       return resultArray;
     },
     rowsName() {
+      if(this.thisTableData){
       const rows = Object.keys(this.thisTableData[0]);
       const deleteIndex = rows.indexOf("year");
       rows.splice(deleteIndex, 1);
       return rows;
+      }else{
+        return [];
+      }
     },
   },
 };
