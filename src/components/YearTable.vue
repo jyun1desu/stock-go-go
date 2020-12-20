@@ -1,42 +1,39 @@
 <template>
-  <div>
-    <table v-if="dataReady" class="table">
-      <!-- <caption class="title">{{ tableTitle }}</caption> -->
-      <tr class="column_years">
-        <td class="names__title">期別<br />種類</td>
-        <td
-          v-for="data in companyData.year_balance_sheets"
-          :key="'column' + data.year"
-          class="year"
-        >
-          {{ data.year }}<br />合併
-        </td>
-      </tr>
-      <tr
-        v-for="(data, index) in columnsWithData"
-        :key="'data' + index"
-        class="data_row"
+  <table class="table">
+    <tr class="column_years">
+      <td class="names__title">期別<br />種類</td>
+      <td
+        v-for="data in companyData.year_balance_sheets"
+        :key="'column' + data.year"
+        class="year"
       >
-        <td
-          v-for="item in setDataOrder(data)"
-          :key="item.key + item.value"
-          :nowrap="item.key === 'name' ? 'nowrap' : 'wrap'"
-          :class="{
-            row_name: item.key === 'name',
-            each_data: item.key !== 'name',
-            negative: item.value < 0,
-            ident: item.key === 'name' ? needIdent(item.value) : false,
-          }"
-        >
-          {{
-            item.key === "name"
-              ? translateToMandarin(item.value)
-              : numberFomat(item.value)
-          }}
-        </td>
-      </tr>
-    </table>
-  </div>
+        {{ data.year }}<br />合併
+      </td>
+    </tr>
+    <tr
+      v-for="(data, index) in columnsWithData"
+      :key="'data' + index"
+      class="data_row"
+    >
+      <td
+        v-for="item in setDataOrder(data)"
+        :key="item.key + item.value"
+        :nowrap="item.key === 'name' ? 'nowrap' : 'wrap'"
+        :class="{
+          row_name: item.key === 'name',
+          each_data: item.key !== 'name',
+          negative: item.value < 0,
+          ident: item.key === 'name' ? needIdent(item.value) : false,
+        }"
+      >
+        {{
+          item.key === "name"
+            ? translateToMandarin(item.value)
+            : numberFomat(item.value)
+        }}
+      </td>
+    </tr>
+  </table>
 </template>
 
 <script>
@@ -45,24 +42,30 @@ export default {
   data() {
     return {
       columns: [],
-      dataReady: false,
+      thisSheetColums: [],
     };
   },
-  mounted() {
+  created() {
     //columns_name
-    this.getColumns();
+    if (!this.columns.length) {
+      this.getAllColumns();
+    }
   },
   methods: {
-    getColumns() {
-      fetch("https://5fbd1e2b3f8f90001638cc76.mockapi.io/layer")
+    async getAllColumns() {
+      await this.$store.commit("setDataStatus", false);
+      await fetch("https://5fbd1e2b3f8f90001638cc76.mockapi.io/layer")
         .then((res) => res.json())
         .then((rowTitles) => {
-          this.columns = rowTitles.filter(
-            (row) => row.table_name === this.typeOfSheet
-          );
+          this.columns = rowTitles;
+          this.getNowColumns();
         });
-      this.dataReady = true;
-      this.$emit("isReady");
+      this.$store.commit("setDataStatus", true);
+    },
+    getNowColumns() {
+      this.thisSheetColums = this.columns.filter(
+        (row) => row.table_name === this.typeOfSheet
+      );
     },
     setDataOrder(data) {
       const orderedKey = Object.keys(data).reverse();
@@ -97,7 +100,7 @@ export default {
       }
     },
     needIdent(columnName) {
-      const columnData = this.columns.find(
+      const columnData = this.thisSheetColums.find(
         (column) => column["column_name"] === columnName
       );
       return columnData.order === 2;
@@ -116,7 +119,7 @@ export default {
     },
     columnsWithData() {
       if (this.sheetData) {
-        const resultArray = this.columns.map((item) => {
+        const resultArray = this.thisSheetColums.map((item) => {
           const obj = { name: item.column_name };
           this.getYearsData(this.sheetData, obj);
           return obj;
@@ -141,14 +144,15 @@ export default {
     typeOfSheet() {
       return this.$store.state.typeOfSheet;
     },
-    a() {
+    dataReady() {
       return this.$store.state.dataReady;
     },
   },
   watch: {
-    typeOfSheet() {
-      this.dataReady = false;
-      this.getColumns();
+    typeOfSheet(value) {
+      this.thisSheetColums = this.columns.filter(
+        (row) => row.table_name === value
+      );
     },
   },
   async beforeRouteUpdate(to, from, next) {

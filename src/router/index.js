@@ -41,6 +41,7 @@ const routes = [{
       await store.dispatch('setCompanyData', {
         companyID: to.params.companyID
       });
+      store.commit('setDataStatus', true);
       next();
     }
   },
@@ -54,6 +55,7 @@ const routes = [{
       await store.dispatch('setCompanyData', {
         companyID: to.params.companyID
       });
+      store.commit('setDataStatus', true);
       next();
     }
   }
