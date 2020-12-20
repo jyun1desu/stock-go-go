@@ -1,40 +1,46 @@
 <template>
-  <table v-if="dataReady" class="table">
-    <!-- <div class="title">1039台積電_每股比例表_年 單位：元、%</div> -->
-    <tr class="column_years">
-      <td class="names__title">期別<br />種類</td>
-      <td v-for="data in thisTableData" :key="'year' + data.year" class="year">
-        {{ data.year }}<br />合併
-      </td>
-    </tr>
-    <!-- <div class="data_table"> -->
-    <tr
-      v-for="(data, index) in columnsWithData"
-      :key="'subdata' + index"
-      class="data_row"
-    >
-      <td
-        v-for="item in setDataOrder(data)"
-        :key="item.key"
-        :class="{
-          row_name: item.key === 'name',
-          each_data: item.key !== 'name',
-          negative: item.value < 0,
-        }"
+  <div>
+    <table v-if="dataReady" class="table">
+      <!-- <div class="title">1039台積電_每股比例表_年 單位：元、%</div> -->
+      <tr class="column_years">
+        <td class="names__title">期別<br />種類</td>
+        <td
+          v-for="data in thisTableData"
+          :key="'year' + data.year"
+          class="year"
+        >
+          {{ data.year }}<br />合併
+        </td>
+      </tr>
+      <!-- <div class="data_table"> -->
+      <tr
+        v-for="(data, index) in columnsWithData"
+        :key="'subdata' + index"
+        class="data_row"
       >
-        {{
-          item.key === "name"
-            ? `${translateToMandarin(item.value)}${
-                translateToMandarin(item.value).includes("比例")
-                  ? "(%)"
-                  : "(元)"
-              }`
-            : trunIntoPercentage(item.value, data)
-        }}
-      </td>
-    </tr>
-    <!-- </div> -->
-  </table>
+        <td
+          v-for="item in setDataOrder(data)"
+          :key="item.key"
+          :class="{
+            row_name: item.key === 'name',
+            each_data: item.key !== 'name',
+            negative: item.value < 0,
+          }"
+        >
+          {{
+            item.key === "name"
+              ? `${translateToMandarin(item.value)}${
+                  translateToMandarin(item.value).includes("比例")
+                    ? "(%)"
+                    : "(元)"
+                }`
+              : trunIntoPercentage(item.value, data)
+          }}
+        </td>
+      </tr>
+      <!-- </div> -->
+    </table>
+  </div>
 </template>
 
 <script>
@@ -78,13 +84,13 @@ export default {
     },
   },
   computed: {
-    dataReady(){
-      return this.$store.state.dataReady
+    dataReady() {
+      return this.$store.state.dataReady;
     },
-    subData(){
-      return this.$store.state.subData
+    subData() {
+      return this.$store.state.subData;
     },
-    dataAPI(){
+    dataAPI() {
       return this.$store.state.subDataAPI;
     },
     lookUpSheet() {
@@ -102,12 +108,12 @@ export default {
       return resultArray;
     },
     rowsName() {
-      if(this.thisTableData){
-      const rows = Object.keys(this.thisTableData[0]);
-      const deleteIndex = rows.indexOf("year");
-      rows.splice(deleteIndex, 1);
-      return rows;
-      }else{
+      if (this.thisTableData) {
+        const rows = Object.keys(this.thisTableData[0]);
+        const deleteIndex = rows.indexOf("year");
+        rows.splice(deleteIndex, 1);
+        return rows;
+      } else {
         return [];
       }
     },

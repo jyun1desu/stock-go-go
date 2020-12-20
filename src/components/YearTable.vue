@@ -1,39 +1,41 @@
 <template>
-  <table class="table">
-    <tr class="column_years">
-      <td class="names__title">期別<br />種類</td>
-      <td
-        v-for="data in companyData.year_balance_sheets"
-        :key="'column' + data.year"
-        class="year"
+  <div>
+    <table class="table">
+      <tr class="column_years">
+        <td class="names__title">期別<br />種類</td>
+        <td
+          v-for="data in companyData.year_balance_sheets"
+          :key="'column' + data.year"
+          class="year"
+        >
+          {{ data.year }}<br />合併
+        </td>
+      </tr>
+      <tr
+        v-for="(data, index) in columnsWithData"
+        :key="'data' + index"
+        class="data_row"
       >
-        {{ data.year }}<br />合併
-      </td>
-    </tr>
-    <tr
-      v-for="(data, index) in columnsWithData"
-      :key="'data' + index"
-      class="data_row"
-    >
-      <td
-        v-for="item in setDataOrder(data)"
-        :key="item.key + item.value"
-        :nowrap="item.key === 'name' ? 'nowrap' : 'wrap'"
-        :class="{
-          row_name: item.key === 'name',
-          each_data: item.key !== 'name',
-          negative: item.value < 0,
-          ident: item.key === 'name' ? needIdent(item.value) : false,
-        }"
-      >
-        {{
-          item.key === "name"
-            ? translateToMandarin(item.value)
-            : numberFomat(item.value)
-        }}
-      </td>
-    </tr>
-  </table>
+        <td
+          v-for="item in setDataOrder(data)"
+          :key="item.key + item.value"
+          :nowrap="item.key === 'name' ? 'nowrap' : 'wrap'"
+          :class="{
+            row_name: item.key === 'name',
+            each_data: item.key !== 'name',
+            negative: item.value < 0,
+            ident: item.key === 'name' ? needIdent(item.value) : false,
+          }"
+        >
+          {{
+            item.key === "name"
+              ? translateToMandarin(item.value)
+              : numberFomat(item.value)
+          }}
+        </td>
+      </tr>
+    </table>
+  </div>
 </template>
 
 <script>
@@ -80,7 +82,7 @@ export default {
     },
   },
   computed: {
-    thisSheetColums(){
+    thisSheetColums() {
       return this.$store.getters.nowYearColumns;
     },
     lookUpSheet() {
