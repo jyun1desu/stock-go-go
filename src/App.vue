@@ -160,7 +160,7 @@
       </section>
     </main>
     <footer v-show="dataReady">
-      <a href="#" class="back">BACK TO TOP</a>
+      <a class="back" @click="backToTop">BACK TO TOP</a>
     </footer>
   </div>
 </template>
@@ -245,6 +245,10 @@ export default {
       }
       this.stockName = "";
     },
+    backToTop() {
+      console.log('a')
+      document.documentElement.scrollTop = 0;
+    }
   },
   components: {
     // YearTable,
@@ -643,5 +647,6 @@ footer {
   border-radius: 5px;
   background-color: $main_theme_color;
   text-align: center;
+  cursor: pointer;
 }
 </style>
