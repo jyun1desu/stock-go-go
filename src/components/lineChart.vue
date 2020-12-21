@@ -24,13 +24,14 @@ export default {
       const keys = Object.keys(data[0]);
       const yearIndex = keys.findIndex((keyName) => keyName === "year");
       keys.splice(yearIndex, 1);
-      let max = 255;
-      let finalData = keys.map((item) => {
+      const dataColor = ["#EF925C", "#65B25B", "#C7BD1E", "#6B7498", "#D8AFAF"];
+      // let max = 255;
+      let finalData = keys.map((item, index) => {
         return {
           label: this.translateToMandarin(item),
           data: this.getData(data, item),
           backgroundColor: "rgba(255, 255, 255, 0)",
-          borderColor: this.setBgColor(max),
+          borderColor: dataColor[index],
           lineTension: 0,
         };
       });
@@ -45,12 +46,12 @@ export default {
       });
       return array;
     },
-    setBgColor(max) {
-      let first = Math.floor(Math.random() * Math.floor(max));
-      let second = Math.floor(Math.random() * Math.floor(max));
-      let third = Math.floor(Math.random() * Math.floor(max));
-      return `rgba(${first}, ${second}, ${third}, 1)`;
-    },
+    // setBgColor(max) {
+    //   let first = Math.floor(Math.random() * Math.floor(max));
+    //   let second = Math.floor(Math.random() * Math.floor(max));
+    //   let third = Math.floor(Math.random() * Math.floor(max));
+    //   return `rgba(${first}, ${second}, ${third}, 1)`;
+    // },
     translateToMandarin(name) {
       return this.lookUpSheet.find((item) => item.english === name).mandarin;
     },
