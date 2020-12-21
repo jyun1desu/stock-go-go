@@ -534,6 +534,10 @@ main {
   }
 }
 
+.scrollup_top {
+  z-index: 3;
+}
+
 .title {
   background-color: $main_theme_color;
 }
@@ -606,6 +610,28 @@ main {
     overflow: scroll;
   }
 }
+
+// 表格首欄凍結
+%first_column_sticky {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+}
+table {
+  .column_years .names__title {
+    @extend %first_column_sticky;
+    background-color: $rows_name_block_color;
+  }
+  tr:nth-child(odd) .row_name {
+    @extend %first_column_sticky;
+    background-color: $column_block_grey;
+  }
+  tr:nth-child(even) .row_name {
+    @extend %first_column_sticky;
+    background-color: white;
+  }
+}
+
 footer {
   padding: 20px 0;
 }
