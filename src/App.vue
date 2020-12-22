@@ -44,8 +44,7 @@
         <nav class="navbar">
           <div class="menu">
             <div
-              @mouseleave="showList = ''"
-              @mouseenter="showList = 'financialStatements'"
+              @click="switchShowList('financialStatements')"
               :class="{ now_picked: showList === 'financialStatements' }"
               class="menu_list"
             >
@@ -77,8 +76,7 @@
               </div>
             </div>
             <div
-              @mouseleave="showList = ''"
-              @mouseenter="showList = 'financialAnalysis'"
+              @click="switchShowList('financialAnalysis')"
               :class="{ now_picked: showList === 'financialAnalysis' }"
               class="menu_list"
             >
@@ -99,8 +97,7 @@
               </div>
             </div>
             <div
-              @mouseenter="showList = 'grapics'"
-              @mouseleave="showList = ''"
+              @click="switchShowList('grapics')"
               :class="{ now_picked: showList === 'grapics' }"
               class="menu_list"
             >
@@ -202,6 +199,10 @@ export default {
     };
   },
   methods: {
+    switchShowList(type){
+      if(type===this.showList) return this.showList='';
+      this.showList = type;
+    },
     handleScroll() {
       // const hearderHeight = this.$refs.header.clientHeight;
       const offsetTop = this.$refs.navbar.clientHeight;
