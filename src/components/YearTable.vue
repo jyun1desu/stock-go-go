@@ -68,7 +68,7 @@ export default {
       return number.toString().split(reg).join(",");
     },
     numberFomat(number) {
-      const indeedNumber = number.toFixed(2)
+      const indeedNumber = number%1===0?number:number.toFixed(2)
       if (number < 0) {
         return `(${this.addComma(Math.abs(indeedNumber))})`;
       } else {
