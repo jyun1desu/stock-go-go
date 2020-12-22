@@ -61,7 +61,9 @@
                   class="dropdown_item"
                   >資產負債表</a
                 >
-                <a class="dropdown_item">損益表</a>
+                <a 
+                @click="getYearReport('income_statements')"
+                class="dropdown_item">損益表</a>
 
                 <a
                   @click="getYearReport('cash_flow_statements')"
@@ -310,7 +312,8 @@ export default {
     yearSheets() {
       if (
         this.typeOfSheet === "balance_sheets" ||
-        this.typeOfSheet === "cash_flow_statements"
+        this.typeOfSheet === "cash_flow_statements" ||
+        this.typeOfSheet === "income_statements"
       ) {
         return true;
       } else {
