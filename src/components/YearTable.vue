@@ -68,22 +68,35 @@ export default {
       return number.toString().split(reg).join(",");
     },
     numberFomat(number) {
+      const indeedNumber = number.toFixed(2)
       if (number < 0) {
-        return `(${this.addComma(Math.abs(number))})`;
+        return `(${this.addComma(Math.abs(indeedNumber))})`;
       } else {
-        return this.addComma(number);
+        return this.addComma(indeedNumber);
       }
     },
     needIdent(columnName) {
-      const columnData = this.thisSheetColums.find(
+      const columnData = this.thisSheetColumns.find(
         (column) => column["column_name"] === columnName
       );
       return columnData.order === 2;
     },
   },
   computed: {
-    thisSheetColums() {
-      return this.$store.getters.nowYearColumns;
+    thisSheetColumns() {
+      if(this.typeOfSheet==='income_statements'){
+        const keys = Object.keys(this.sheetData[0]);
+        const yearIndex = keys.findIndex(name=>name==='year')
+        keys.splice(yearIndex,1)
+        return keys.map(name=>{
+          return {
+            column_name:name,
+            order:1
+          }
+        })
+      }else{
+        return this.$store.getters.nowYearColumns;
+      }
     },
     lookUpSheet() {
       return this.$store.state.lookUpSheet;
@@ -97,14 +110,14 @@ export default {
     },
     columnsWithData() {
       if (this.sheetData) {
-        const resultArray = this.thisSheetColums.map((item) => {
+        const resultArray = this.thisSheetColumns.map((item) => {
           const obj = { name: item.column_name };
           this.getYearsData(this.sheetData, obj);
           return obj;
         });
         return resultArray;
       } else {
-        return {};
+        return this.sheetData;
       }
     },
     tableTitle() {
