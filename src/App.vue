@@ -164,7 +164,7 @@
             >
           </div>
         </div>
-        <router-view :height="180" class="table_block" />
+        <router-view :height="150" :width="450" class="table_block" />
       </section>
     </main>
     <footer v-show="dataReady">
@@ -629,7 +629,7 @@ main {
   }
 
   .table_block {
-    width: 80%;
+    width: 100%;
     margin: 30px auto 0;
     overflow: scroll;
   }
