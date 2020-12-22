@@ -63,7 +63,7 @@
                 >
                 <a 
                 @click="getYearReport('income_statements')"
-                class="dropdown_item">損益表</a>
+                class="dropdown_item">綜合損益表</a>
 
                 <a
                   @click="getYearReport('cash_flow_statements')"
