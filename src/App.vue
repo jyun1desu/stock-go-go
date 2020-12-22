@@ -248,7 +248,6 @@ export default {
       this.stockName = "";
     },
     backToTop() {
-      console.log('a')
       document.documentElement.scrollTop = 0;
     }
   },
