@@ -48,7 +48,7 @@
               :class="{ now_picked: showList === 'financialStatements' }"
               class="menu_list"
             >
-              <a href="##" class="dropdown_menu">
+              <a class="dropdown_menu">
                 <i
                   :class="{ open_list: showList === 'financialStatements' }"
                   class="toggle_icon fas fa-caret-down fa-fw"
@@ -80,7 +80,7 @@
               :class="{ now_picked: showList === 'financialAnalysis' }"
               class="menu_list"
             >
-              <a href="##" class="dropdown_menu"
+              <a class="dropdown_menu"
                 ><i
                   :class="{ open_list: showList === 'financialAnalysis' }"
                   class="toggle_icon fas fa-caret-down fa-fw"
@@ -101,7 +101,7 @@
               :class="{ now_picked: showList === 'grapics' }"
               class="menu_list"
             >
-              <a href="##" class="dropdown_menu">
+              <a class="dropdown_menu">
                 <i
                   :class="{ open_list: showList === 'grapics' }"
                   class="toggle_icon fas fa-caret-down fa-fw"
