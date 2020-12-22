@@ -1,7 +1,11 @@
 <template>
   <div id="app">
-    <header :class="{ scrollup_top: stickTheBar }">
-      <div class="container" ref="header">
+    <header 
+    :class="{ scrollup_top: stickTheBar }"
+    ref="header">
+      <div 
+      class="container" 
+      ref="navbar">
         <a @click="backToHome" class="logo" href="#">
           <img src="@/assets/logo.jpg" alt="brand logo" />
         </a>
@@ -133,7 +137,9 @@
         </div>
       </section>
     </header>
-    <main :class="{ scrollup_top: stickTheBar }">
+    <main 
+    :style="{paddingTop:`${headerHeight+25}px`}"
+    :class="{ scrollup_top: stickTheBar }">
       <Loading v-if="!dataReady" />
       <section v-show="dataReady" class="data">
         <div class="report_data">
@@ -158,7 +164,7 @@
             >
           </div>
         </div>
-        <router-view :height="250" class="table_block" />
+        <router-view :height="180" class="table_block" />
       </section>
     </main>
     <footer v-show="dataReady">
@@ -174,8 +180,11 @@
 import Loading from "./components/loadingAnimation.vue";
 export default {
   name: "App",
-  async created() {
+  created() {
     window.addEventListener("scroll", this.handleScroll);
+  },
+  mounted(){
+    this.headerHeight = this.$refs.header.clientHeight;
   },
   data() {
     return {
@@ -184,6 +193,8 @@ export default {
       reportType: "year",
       showNotYetDialog: false,
       stickTheBar: false,
+      headerPadding:20,
+      headerHeight:0,
       nowCanSearch: [
         { company: "台積電", stock_symbol: "2330" },
         { company: "科風", stock_symbol: "3043" },
@@ -192,7 +203,11 @@ export default {
   },
   methods: {
     handleScroll() {
-      const offsetTop = this.$refs.header.clientHeight;
+      // const hearderHeight = this.$refs.header.clientHeight;
+      const offsetTop = this.$refs.navbar.clientHeight;
+      // this.headerHeight = this.$refs.header.clientHeight;
+      // const percentage = (window.scrollY/offsetTop).toFixed(2);
+      // this.headerPadding = this.headerPadding - 20*percentage;
       if (window.scrollY > offsetTop) {
         this.stickTheBar = true;
       } else {
@@ -350,7 +365,10 @@ a {
 }
 
 header {
+  position: fixed;
+  width:100%;
   background-color: #fff;
+  z-index: 10;
   &.scrollup_top {
     position: fixed;
     top: 0;
@@ -397,7 +415,7 @@ header {
     margin: 0 auto;
     display: flex;
     align-items: center;
-    transition: all 0.5s;
+    transition: all .5s;
     .logo img {
       cursor: pointer;
       width: 100px;
@@ -611,7 +629,7 @@ main {
   }
 
   .table_block {
-    width: 90%;
+    width: 80%;
     margin: 30px auto 0;
     overflow: scroll;
   }
